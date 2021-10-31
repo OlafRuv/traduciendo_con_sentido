@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "535064233426",
+    "project_id": "traduciendoconsentidoproject",
+    "storage_bucket": "traduciendoconsentidoproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535064233426:android:f5f65e6788e3ecfe1eb40b",
+        "android_client_info": {
+          "package_name": "com.traduciendoconsentido.tcs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "535064233426-n9b5t23d4b56cbjiidjpfd6kul4a6efq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVX3FBABIboRXrec9-dw7ejZqjiui6JdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "535064233426-n9b5t23d4b56cbjiidjpfd6kul4a6efq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
