@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tcs/src/pages/scroll/scroll_page.dart';
@@ -14,7 +15,9 @@ class ConfiguracionPage extends StatefulWidget {
 
 class _ConfiguracionPageState extends State<ConfiguracionPage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+    User? usuario = FirebaseAuth.instance.currentUser; //INSTANCIA QUE SE USARA PARA SABER SI EL USUARIO SE ENCUENTRA EN SESION
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('CONFIGURACIÓN'),
@@ -30,7 +33,7 @@ class _ConfiguracionPageState extends State<ConfiguracionPage> {
               child: Column(
                 children: [
                   _tituloDescripcion(),
-                  Text('pepe_el_toro_es_inocente@gmail.com', style: TextStyle(fontSize: 20.0),),
+                  Text('Usuario: ' + (usuario == null ? 'Usuario no registrado' : FirebaseAuth.instance.currentUser!.email.toString()), style: TextStyle(fontSize: 20.0),), //SI EL USUARIO SE ENCUENTRA EN SESION MOSTRARA EL CORREO DEL USUARIO Y SI ESTA EN NULL MOSTRARA QUE EL USUARIO NO ESTA REGISTRADO
                   SizedBox(height: 30.0,),
                   _botonPoliticasDePrivacidad(),
                   SizedBox(height: 30.0,),
@@ -138,7 +141,9 @@ class _ConfiguracionPageState extends State<ConfiguracionPage> {
             padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
             child: Text('Salir', style: TextStyle(fontSize: 20.0),),
           ),
-          onPressed: (){
+          onPressed: () async { 
+            await FirebaseAuth.instance.signOut(); //METODO PARA QUE EL USUARIO SALGA DE LA SESION DE FIREBASE
+            setState(() {});
             final rutaScrollPage = MaterialPageRoute(
                 builder: (context){
                   return ScrollPage();

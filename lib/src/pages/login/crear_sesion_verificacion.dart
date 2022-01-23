@@ -127,11 +127,13 @@ class CrearSesionVerificacionPage extends StatelessWidget {
 
   Widget _botonIngresar(BuildContext context){
 
+    String email=''; //Editado
+
     return MaterialButton(
       onPressed: (){
         final rutaCrearPassword = MaterialPageRoute(
                 builder: (context){
-                  return CrearSesionPasswordPage();
+                  return CrearSesionPasswordPage(email); //Editado
                 }
               );
             Navigator.push( context, rutaCrearPassword);

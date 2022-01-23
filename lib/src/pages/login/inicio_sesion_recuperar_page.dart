@@ -151,9 +151,9 @@ class InicioSesionRecuperarPage extends StatelessWidget {
 
 
   Widget _popUpRecuperarCredenciales(BuildContext context) {
-  return new AlertDialog(
+  return AlertDialog(
     title: const Text('Se envio la contraseña a su correo'),
-    content: new Column(
+    content: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -161,7 +161,7 @@ class InicioSesionRecuperarPage extends StatelessWidget {
       ],
     ),
     actions: <Widget>[
-      new FlatButton(
+      FlatButton(
         onPressed: () {
           final rutaInicioSesion = MaterialPageRoute(
                 builder: (context){

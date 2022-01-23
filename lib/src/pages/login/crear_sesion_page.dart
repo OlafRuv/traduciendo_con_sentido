@@ -1,13 +1,28 @@
-import 'package:tcs/src/pages/login/crear_sesion_verificacion.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tcs/src/pages/login/crear_sesion_password_page.dart';
+import 'package:tcs/src/pages/login/crear_sesion_verificacion.dart';
 
-class CrearSesionPage extends StatelessWidget {
-  const CrearSesionPage({Key? key}) : super(key: key);
+
+class CrearSesionPage extends StatefulWidget {
+  
+  //const CrearSesionPage({Key? key}) : super(key: key);
+  @override
+  State<CrearSesionPage> createState() => _CrearSesionPageState();
+}
+
+class _CrearSesionPageState extends State<CrearSesionPage> {
+  final correoController = TextEditingController(); //NOS AYUDA A TENER UN CONTROL EN EL VALOR DEL TEXTFIELD Y LE NOTIFICA AL OYENTE PARA QUE INTERPRETE EL TEXTO
+  String correo = ''; //SE USUARA PARA PASAR EL VALOR DEL CORREO A LA OTRA PAGINA DE PASSWORD
+
+  final GlobalKey<FormState> _key = GlobalKey<FormState>(); //Editado
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        
         children: [
           _crearFondo(context),
           _loginForm(context),
@@ -15,7 +30,6 @@ class CrearSesionPage extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _crearFondo(BuildContext context){
 
@@ -65,12 +79,12 @@ class CrearSesionPage extends StatelessWidget {
     );
   }
 
-
   Widget _loginForm(BuildContext context){
 
     final size = MediaQuery.of(context).size;//SACAR DIMESIONES DE LA PANTALLA
 
     return SingleChildScrollView( //ME VA A PERMITIR HACER SCROLL DEPENDIENDO DEL TAMAÑO DEL HIJO
+      
       child: Column(
         children: [
           SafeArea(
@@ -101,7 +115,7 @@ class CrearSesionPage extends StatelessWidget {
                 SizedBox(height: 60.0,),
                 _crearEmail(),
                 SizedBox(height: 30.0,),
-                _botonConfirmar(context)
+                //_botonConfirmar(context)
               ],
             ),
           ),
@@ -110,10 +124,86 @@ class CrearSesionPage extends StatelessWidget {
     );
   }
 
+
+
+
+  Widget _crearEmail() {
+    return Form(
+      key: _key, //Editado
+      child: Column(
+        children: [
+          Container(
+            
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                icon: Icon(Icons.alternate_email, color: Colors.green[800], ),
+                hintText: 'nombre@correo.com',
+                labelText: 'Correo electronico',
+    
+              ),
+              controller: correoController, //Editado
+              validator: validarEmail, //Editado
+            ),
+          ),
+          MaterialButton(
+        onPressed: (){
+          
+          if (_key.currentState!.validate()){ //Editado
+            correo = correoController.text; //Editado
+            final rutaVerificacion = MaterialPageRoute(
+                  builder: (context){
+                    //return CrearSesionVerificacionPage(); //Editado
+                    return CrearSesionPasswordPage(correo); //Editado
+                  }
+                );
+              Navigator.push( context, rutaVerificacion);
+          }
+          
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+          child: Text('Confirmar'),
+        ),
+        shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(30.0), ),
+        elevation: 0.0,
+        color: Colors.green[800],
+        textColor: Colors.white,
+      ),
+    
+        ],
+      ),
+    );
+  }
+
+
+
+  String? validarEmail(String? formularioEmail){ //Editado
+    if(formularioEmail ==null || formularioEmail.isEmpty){
+      return 'Correo electronico requerido';
+    }
+
+    String patron = r'\w+@\w+\.\w+';
+    RegExp regex = RegExp(patron);
+    if(!regex.hasMatch(formularioEmail)){
+      return 'Formato de Correo Electronico invalido.';
+    }
+      return null;
+  }
+
+
+
+
+
+
+
+  /*
   Widget _crearEmail() {
     return Container(
+      
       padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
+      child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           icon: Icon(Icons.alternate_email, color: Colors.green[800], ),
@@ -121,24 +211,37 @@ class CrearSesionPage extends StatelessWidget {
           labelText: 'Correo electronico',
 
         ),
+        controller: correoController, //Editado
+        validator: validarEmail, //Editado
       ),
     );
   }
 
 
-  
+
+  String? validarEmail(String? formularioEmail){ //Editado
+    if(formularioEmail ==null || formularioEmail.isEmpty){
+      return 'Correo electronico requerido';
+    }
+      return null;
+  }
 
 
   Widget _botonConfirmar(BuildContext context){
-
     return MaterialButton(
       onPressed: (){
-        final rutaVerificacion = MaterialPageRoute(
+        
+        if (_key.currentState!.validate()){ //Editado
+          correo = correoController.text; //Editado
+          final rutaVerificacion = MaterialPageRoute(
                 builder: (context){
-                  return CrearSesionVerificacionPage();
+                  //return CrearSesionVerificacionPage(); //Editado
+                  return CrearSesionPasswordPage(correo); //Editado
                 }
               );
             Navigator.push( context, rutaVerificacion);
+        }
+        
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
@@ -149,5 +252,5 @@ class CrearSesionPage extends StatelessWidget {
       color: Colors.green[800],
       textColor: Colors.white,
     );
-  }
+  }*/
 }

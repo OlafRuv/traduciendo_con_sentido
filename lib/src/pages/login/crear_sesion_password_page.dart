@@ -1,8 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tcs/src/pages/home/menu/menu_page.dart';
 import 'package:flutter/material.dart';
 
-class CrearSesionPasswordPage extends StatelessWidget {
-  const CrearSesionPasswordPage({Key? key}) : super(key: key);
+class CrearSesionPasswordPage extends StatefulWidget {
+  //const CrearSesionPasswordPage({Key? key}) : super(key: key);
+
+  
+
+  String correo; //Editado
+  CrearSesionPasswordPage(this.correo); //Editado
+
+  @override
+  State<CrearSesionPasswordPage> createState() => _CrearSesionPasswordPageState();
+}
+
+class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
+
+  final contraseniaController = TextEditingController(); //Editado
+  final GlobalKey<FormState> _key = GlobalKey<FormState>(); //Editado
+  String errorMensajeFirebase = '';
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +32,7 @@ class CrearSesionPasswordPage extends StatelessWidget {
     );
   }
 
-
   Widget _crearFondo(BuildContext context){
-
     final size = MediaQuery.of(context).size; //PARA OCUPAR EL 40% DE LA PANTALLA
     final colorFondo = Container(
       height: size.height * 0.4,
@@ -65,11 +79,8 @@ class CrearSesionPasswordPage extends StatelessWidget {
     );
   }
 
-
   Widget _loginForm(BuildContext context){
-
     final size = MediaQuery.of(context).size;//SACAR DIMESIONES DE LA PANTALLA
-
     return SingleChildScrollView( //ME VA A PERMITIR HACER SCROLL DEPENDIENDO DEL TAMAÑO DEL HIJO
       child: Column(
         children: [
@@ -101,7 +112,8 @@ class CrearSesionPasswordPage extends StatelessWidget {
                 SizedBox(height: 30.0,),
                 _crearPassword(),
                 SizedBox(height: 30.0,),
-                _botonIngresar(context)
+                //_botonIngresar(context),
+                Container(child: Text('Usuario -> ' + widget.correo))//Editado
               ],
             ),
           ),
@@ -110,8 +122,89 @@ class CrearSesionPasswordPage extends StatelessWidget {
     );
   }
 
-
+  
   Widget _crearPassword() {
+    return Form(
+      key: _key, //Editado
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextFormField(
+              obscureText: true,
+              decoration: InputDecoration(
+                icon: Icon(Icons.lock_outline, color: Colors.green[800], ),
+                labelText: 'Contraseña',
+              ),
+              controller: contraseniaController,
+              validator: validarPassword,
+            ),
+          ),
+          MaterialButton(
+            onPressed: () async { //Editado
+            if (_key.currentState!.validate()){ //Editado
+              try{ //Editado
+                await FirebaseAuth.instance.createUserWithEmailAndPassword( //METODO QUE CREA UNA NUEVA CUENTA EN EL PROYECTO DE FIREBASE Y LO LOGEA EN SEGUIDA
+                  email: widget.correo, //Editado
+                  password: contraseniaController.text //Editado
+                );
+
+                final rutaMenu = MaterialPageRoute(
+                        builder: (context){
+                          return MenuPage();
+                        }
+                      );
+                    Navigator.push( context, rutaMenu);
+
+
+                errorMensajeFirebase = '';
+              } on FirebaseAuthException catch (error){
+                errorMensajeFirebase = error.message!;
+              }
+              
+
+              setState(() {});//Editado
+
+
+                
+            }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+              child: Text('Ingresar'),
+            ),
+            shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(30.0), ),
+            elevation: 0.0,
+            color: Colors.green[800],
+            textColor: Colors.white,
+          ),
+
+          Center(child: Text(errorMensajeFirebase),), //Editado
+        ],
+      ),
+    );
+  }
+
+
+  String? validarPassword(String? formularioPassword){ //Editado
+    if(formularioPassword ==null || formularioPassword.isEmpty){
+      return 'Contraseña requerida';
+    }
+
+    String patron = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~.]).{6,}$';
+    RegExp regex = RegExp(patron);
+    if(!regex.hasMatch(formularioPassword)){
+      return 'La contraseña debe de tener al menos 6 caracteres, incluyendo alguna letra mayuscula, minuscula, numero y simbolo';
+    }
+      return null;
+  }
+
+  
+  
+  
+  
+  
+  /*Widget _crearPassword() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
@@ -120,15 +213,19 @@ class CrearSesionPasswordPage extends StatelessWidget {
           icon: Icon(Icons.lock_outline, color: Colors.green[800], ),
           labelText: 'Contraseña',
         ),
+        controller: contraseniaController,
       ),
     );
   }
 
-
   Widget _botonIngresar(BuildContext context){
 
     return MaterialButton(
-      onPressed: (){
+      onPressed: () async { //Editado
+      await FirebaseAuth.instance.createUserWithEmailAndPassword( //Editado
+        email: widget.correo, //Editado
+        password: contraseniaController.text //Editado
+      );
         final rutaMenu = MaterialPageRoute(
                 builder: (context){
                   return MenuPage();
@@ -145,5 +242,5 @@ class CrearSesionPasswordPage extends StatelessWidget {
       color: Colors.green[800],
       textColor: Colors.white,
     );
-  }
+  }*/
 }

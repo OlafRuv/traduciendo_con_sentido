@@ -13,12 +13,11 @@ import 'package:tcs/src/pages/login/inicio_sesion_page.dart';
 import 'package:tcs/src/pages/scroll/scroll_page.dart';
 
 void main() {
-  //------------------------------
+
   WidgetsFlutterBinding.ensureInitialized(); //VA A ASEGURAR QUE TODAS LAS DEPENDENCIAS ESTEN INICIALIZADAS ANTES DE COMENZAR A LANZAR LOS WIDGETS
   Firebase.initializeApp().then((value) {
     runApp(const MyApp());
   }); //VA A NUESTRA CARPETA DE ANDROID PARA VERIFICAR QUE SE ENCUENTRE EL ARCHIVO DE GOOGLE-SERVICES.JSON
-  //------------------------------
   //runApp(const MyApp());
 }
 

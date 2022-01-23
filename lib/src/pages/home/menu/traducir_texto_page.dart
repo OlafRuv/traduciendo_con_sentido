@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
@@ -9,6 +11,9 @@ class TraducirTextoPage extends StatefulWidget {
 }
 
 class _TraducirTextoPageState extends State<TraducirTextoPage> {
+  final guardarTextoController = TextEditingController();
+  final guardarTituloControllerPopUp = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +90,7 @@ Widget _tituloDescripcion(){
     String textoIngresado = "";
 
     return Container(
-      child: TextField(
+      child: TextFormField(
         onChanged: (texto) {
           textoIngresado = texto;
         },
@@ -93,6 +98,7 @@ Widget _tituloDescripcion(){
           hintText: 'Ingresar',
           contentPadding: EdgeInsets.all(20),
         ),
+        controller: guardarTextoController,
       ),
     );
   }
@@ -125,7 +131,11 @@ Widget _tituloDescripcion(){
             padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
             child: Text('Guardar', style: TextStyle(fontSize: 20.0),),
           ),
-          onPressed: (){
+          onPressed: (){           
+            showDialog( //ALERTA DIALOG QUE NOS SERVIRA PARA ALERTAR AL USUARIO QUE SE GUARDO CON EXITO SU TEXTO
+              context: context, 
+              builder: (BuildContext context) => _popUpTextoGuardado(context)
+            );
             //navegar
           },
         ),
@@ -150,6 +160,67 @@ Widget _tituloDescripcion(){
       ),
     );
   }
+
+
+
+  Future<void> escrituraFirestore( String guardarTextoFirestore, String guardarTituloFirestore) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String identificadorCorreo = auth.currentUser!.email.toString();
+    String identificadorUid = auth.currentUser!.uid.toString();
+
+    CollectionReference coleccionUsuarios = FirebaseFirestore.instance.collection('usuarios');
+    
+    coleccionUsuarios.add({
+      'Titulo' : guardarTituloFirestore,
+      'Texto_guardado' : guardarTextoFirestore, //INGRESA EN EL CAMPO TEXTO GUARDADO NUESTRO TEXTO A GUARDAR
+      'Nombre_usuario': identificadorCorreo, //INGRESA EN EL CAMPO NOMBRE USUARIO NUESTRO USUARIO (CORREO)
+      'Uid' : identificadorUid, //INGRESA EN EL CAMPO UID NUESTRO IDENTIFICADOR DE USUARIO
+    });
+
+
+    return;
+  }
+
+
+//POPUP QUE APARECERA CUANDO SE GUARDE EL TEXTO
+  Widget _popUpTextoGuardado(BuildContext context) {
+  String textoIngresadoPopUp = "";
+  return AlertDialog(
+    title: const Text('Ingrese un titulo para su traducción'),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        TextFormField(
+        onChanged: (texto) {
+          textoIngresadoPopUp = texto;
+        },
+        decoration: InputDecoration(
+          hintText: 'Ingresa tu titulo deseado',
+          contentPadding: EdgeInsets.all(20),
+        ),
+        controller: guardarTituloControllerPopUp,
+      ),
+        Text("Usted podra consultar su texto guardado en la opción de Traducciones guardadas"),
+      ],
+    ),
+    actions: <Widget>[
+      MaterialButton(
+        onPressed: () {
+          escrituraFirestore(guardarTextoController.text, guardarTituloControllerPopUp.text);
+          final rutaTraducirTexto = MaterialPageRoute(
+                builder: (context){
+                  return TraducirTextoPage();
+                }
+              );
+            Navigator.push( context, rutaTraducirTexto);
+        },
+        textColor: Theme.of(context).primaryColor,
+        child: const Text('Continuar'),
+      ),
+    ],
+  );
+}
 
 
 

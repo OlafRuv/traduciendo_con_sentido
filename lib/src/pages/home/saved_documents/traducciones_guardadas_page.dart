@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:math';
@@ -12,26 +13,121 @@ class TraduccionesGuardadasPage extends StatefulWidget {
 }
 
 class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
-  
+CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("usuarios");
+
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('usuarios').where('Nombre_usuario', isEqualTo: FirebaseAuth.instance.currentUser!.email.toString()).snapshots();
+
+
+
   //PARTE DONDE SE CONSULTARA A LA BD----------------------------------------------------------
   @override
   void initState() {
     super.initState();
-    obtenerUsuarios();
+    //obtenerUsuarios(); (//SE COMENTO TEMPORALMENTE PARA USO DE PRUEBAS)
+    
   }
 
-  void obtenerUsuarios() async {
-    CollectionReference referenciaColeccion = FirebaseFirestore.instance.collection("usuarios");
-    QuerySnapshot users = await referenciaColeccion.get();//CONSULTA A ESA COLECCION
-    
-    if (users.docs.length != 0){ //SI HAY VALORES
-      for (var doc in users.docs) {
-        print(doc.data());
-        
-      }
-    }
+
+
+  Widget mostrarTraduccionesGuardadas(){
+    return StreamBuilder<QuerySnapshot>(
+        stream: _usersStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+      
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+          }
+          
+          
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+              return ListTile(
+                //title: Text(data['Nombre_usuario']),
+                title: Text(data['Titulo']),
+                subtitle: Text(data['Texto_guardado']),
+                //trailing: Text(data['Uid']),
+                trailing: MaterialButton(
+                      onPressed: (){
+                        showDialog( 
+                          context: context, 
+                          builder: (BuildContext context) => 
+                          AlertDialog(
+                          title: const Text('¿Está seguro en eliminar esta traducción?'),
+                          actions: [
+                            MaterialButton(
+                              onPressed: () {
+                                final rutaTraduccionesGuardadas = MaterialPageRoute(
+                                      builder: (context){
+                                        return TraduccionesGuardadasPage();
+                                      }
+                                    );
+                                  Navigator.push( context, rutaTraduccionesGuardadas);
+                              },
+                              textColor: Theme.of(context).primaryColor,
+                              child: const Text('Cancelar'),
+                            ),
+                            MaterialButton(
+                              onPressed: () {
+                                print("DOCUMENTO ELIMINDADO: " + document.id);
+                                FirebaseFirestore.instance.collection('usuarios').doc(document.id).delete(); //GRACIAS A QUE ACCEDEMOS MEDIANTE EL ID DEL DOCUMENTO, LA ELIMINACION ES MAS SENCILLA
+                                final rutaTraduccionesGuardadas = MaterialPageRoute(
+                                      builder: (context){
+                                        return TraduccionesGuardadasPage();
+                                      }
+                                    );
+                                  Navigator.push( context, rutaTraduccionesGuardadas);
+                              },
+                              textColor: Theme.of(context).primaryColor,
+                              child: const Text('Eliminar'),
+                            ),
+                          ],
+                        )
+                        );
+                        
+                        /*showDialog( //ALERTA DIALOG QUE NOS SERVIRA PARA ALERTAR AL USUARIO QUE SE GUARDO CON EXITO SU TEXTO
+                          context: context, 
+                          builder: (BuildContext context) => popUpEliminarRegistro(context)
+                        );*/
+                        //=============================================
+                        //print("DOCUMENTO ELIMINDADO: " + document.id);
+                        //FirebaseFirestore.instance.collection('usuarios').doc(document.id).delete(); //GRACIAS A QUE ACCEDEMOS MEDIANTE EL ID DEL DOCUMENTO, LA ELIMINACION ES MAS SENCILLA
+                        //===========================================
+                        
+                      },
+                      child: const Text('Eliminar'),
+                    ),
+                    
+                /*onTap: (){
+                  print("DOCUMENTO ELIMINDADO: " + document.id);
+                  FirebaseFirestore.instance.collection('usuarios').doc(document.id).delete(); //GRACIAS A QUE ACCEDEMOS MEDIANTE EL ID DEL DOCUMENTO, LA ELIMINACION ES MAS SENCILLA
+                },*/
+                /*Row(
+                  children: [
+                    MaterialButton(
+                      onPressed: (){},
+                      child: const Text('Imprimir'),
+                    ),
+                    MaterialButton(
+                      onPressed: (){},
+                      child: const Text('Eliminar'),
+                    )
+                  ],
+                ),*/
+
+              );
+            }).toList(),
+          );
+          
+        },
+          );
   }
-  //------------------------------------------------------------------------------
+
+
+
   
   @override
   Widget build(BuildContext context) {
@@ -43,18 +139,9 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
       body: Stack(
         children: [
           _fondoApp(),
-
-          SingleChildScrollView( //SIMILAR A LISTVIEW, LA DIFERENCIA ES QUE ABARCA TODA LA PANTALLA
-              child: Column(
-                children: [
-                  _tituloDescripcion(),
-                  //_botonesRedondeados(context)
-                ],
-              ),
-            )
-        ],
+          mostrarTraduccionesGuardadas()
+        ] 
       ),
-      
       bottomNavigationBar: _bottomNavigationBar(context),
     );
   }
@@ -96,8 +183,38 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
   }
 
 
-
-
+  //POPUP QUE APARECERA CUANDO QUIERA ELIMINARSE EL REGISTRO DESEADO
+  Widget popUpEliminarRegistro(BuildContext context) {
+  return AlertDialog(
+    title: const Text('¿Está seguro en eliminar esta traducción?'),
+    actions: [
+      MaterialButton(
+        onPressed: () {
+          final rutaTraduccionesGuardadas = MaterialPageRoute(
+                builder: (context){
+                  return TraduccionesGuardadasPage();
+                }
+              );
+            Navigator.push( context, rutaTraduccionesGuardadas);
+        },
+        textColor: Theme.of(context).primaryColor,
+        child: const Text('Cancelar'),
+      ),
+      MaterialButton(
+        onPressed: () {
+          final rutaTraduccionesGuardadas = MaterialPageRoute(
+                builder: (context){
+                  return TraduccionesGuardadasPage();
+                }
+              );
+            Navigator.push( context, rutaTraduccionesGuardadas);
+        },
+        textColor: Theme.of(context).primaryColor,
+        child: const Text('Eliminar'),
+      ),
+    ],
+  );
+}
 
 
 
