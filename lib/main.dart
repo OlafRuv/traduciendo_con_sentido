@@ -1,64 +1,39 @@
 import 'package:flutter/material.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tcs/src/pages/home/menu/menu_page.dart';
-import 'package:tcs/src/pages/home/menu/traducir_documentos_page.dart';
-import 'package:tcs/src/pages/home/menu/traducir_imagenes_page.dart';
-import 'package:tcs/src/pages/home/menu/traducir_texto_page.dart';
-import 'package:tcs/src/pages/home/saved_documents/traducciones_guardadas_page.dart';
-import 'package:tcs/src/pages/home/settings/configuracion_page.dart';
-import 'package:tcs/src/pages/login/crear_sesion_page.dart';
-import 'package:tcs/src/pages/login/inicio_sesion_page.dart';
-import 'package:tcs/src/pages/scroll/scroll_page.dart';
+import 'package:tcs/router/app_routes.dart';
 
 void main() {
-
-  WidgetsFlutterBinding.ensureInitialized(); //VA A ASEGURAR QUE TODAS LAS DEPENDENCIAS ESTEN INICIALIZADAS ANTES DE COMENZAR A LANZAR LOS WIDGETS
+// Nos aseguramos que todas las dependencias esten inicializadas antes de comenzar a lanzar los widgets
+  WidgetsFlutterBinding.ensureInitialized(); 
+// Va a nuestra carpeta de android para verificar que se encuentre el archivo de google-services.json
   Firebase.initializeApp().then((value) {
     runApp(const MyApp());
-  }); //VA A NUESTRA CARPETA DE ANDROID PARA VERIFICAR QUE SE ENCUENTRE EL ARCHIVO DE GOOGLE-SERVICES.JSON
-  //runApp(const MyApp());
+  }); 
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+// Este widget es la raiz de la Aplicación
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Retiramos el banner de debug
       debugShowCheckedModeBanner: false,
+      // Titulo de la aplicacion
       title: 'Traduciendo Con Sentido',
-      /*theme: ThemeData(
-
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),*/
-
-      initialRoute: 'scroll',
-      routes: {
-        //SECCION DE BIENVENIDA
-        'scroll' : (BuildContext context) => ScrollPage(),
-        //SECCION SCROLL DE INICIO/CREAR SESION
-        'iniciar-sesion' : (BuildContext context) => InicioSesionPage(),
-        'crear-sesion' : (BuildContext context) => CrearSesionPage(),
-        //SECCION PRINCIPAL DE TRADUCCIONES
-        'traducir-texto' : (BuildContext context) => TraducirTextoPage(),
-        'traducir-documentos' : (BuildContext context) => TraducirDocumentosPage(),
-        'traducir-imagenes' : (BuildContext context) => TraducirImagenesPage(),
-        //SECCION DE LA BARRA INFERIOR DE LA APLICACION
-        'menu' : (BuildContext context) => MenuPage(),
-        'traducciones-guardadas' : (BuildContext context) => TraduccionesGuardadasPage(),
-        'configuracion' : (BuildContext context) => ConfiguracionPage(),
-
-      }
+      // Ruta Inicial
+      initialRoute: AppRoutes.initialRoute,
+      // Funcion generadora de rutas
+      routes: AppRoutes.getAppRoutes(),
+      // Rua default
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }
 
 
-
+// TODO:Revisar que es este codigo debajo del main y eliminarlo si no es de utilidad 
 
 
 /*
