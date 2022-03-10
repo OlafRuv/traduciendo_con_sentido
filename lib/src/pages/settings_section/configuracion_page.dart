@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:tcs/src/pages/scroll/scroll_page.dart';
-import 'package:tcs/src/pages/home/settings/politicas_uso_page.dart';
-import 'package:tcs/src/pages/home/settings/politicas_privacidad_page.dart';
+import 'package:tcs/src/pages/scroll_section/scroll_page.dart';
+import 'package:tcs/src/pages/settings_section/politicas_uso_page.dart';
+import 'package:tcs/src/pages/settings_section/politicas_privacidad_page.dart';
 
 
 class ConfiguracionPage extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tcs/src/pages/login/inicio_sesion_page.dart';
+import 'package:tcs/src/pages/login_section/inicio_sesion_page.dart';
 //import 'package:diseno_inicial/src/pages/home/menu/menu_page.dart';
 
 class InicioSesionRecuperarPage extends StatelessWidget {

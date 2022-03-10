@@ -1,4 +1,4 @@
-import 'package:tcs/src/pages/login/crear_sesion_password_page.dart';
+import 'package:tcs/src/pages/login_section/crear_sesion_password_page.dart';
 import 'package:flutter/material.dart';
 
 class CrearSesionVerificacionPage extends StatelessWidget {

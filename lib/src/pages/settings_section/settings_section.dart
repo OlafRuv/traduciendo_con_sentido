@@ -1,0 +1,3 @@
+export 'package:tcs/src/pages/settings_section/configuracion_page.dart';
+export 'package:tcs/src/pages/settings_section/politicas_privacidad_page.dart';
+export 'package:tcs/src/pages/settings_section/politicas_uso_page.dart';

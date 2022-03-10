@@ -1,25 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tcs/src/pages/home/menu/menu_page.dart';
 import 'package:flutter/material.dart';
 
-class CrearSesionPasswordPage extends StatefulWidget {
-  //const CrearSesionPasswordPage({Key? key}) : super(key: key);
+import 'package:tcs/src/pages/login_section/inicio_sesion_recuperar_page.dart';
+import 'package:tcs/src/pages/menu_section/menu_page.dart';
 
-  
+// * Credenciales de ejemplo
+// tercerCorreo@gmail.com
+// 123aA.
 
-  String correo; //Editado
-  CrearSesionPasswordPage(this.correo); //Editado
+
+class InicioSesionPage extends StatefulWidget {
+  const InicioSesionPage({Key? key}) : super(key: key);
 
   @override
-  State<CrearSesionPasswordPage> createState() => _CrearSesionPasswordPageState();
+  State<InicioSesionPage> createState() => _InicioSesionPageState();
 }
 
-class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
+class _InicioSesionPageState extends State<InicioSesionPage> {
 
+  final correoController = TextEditingController(); //Editado
   final contraseniaController = TextEditingController(); //Editado
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>(); //Editado
   String errorMensajeFirebase = '';
 
+  bool banderaCorreoValidado = false;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +39,7 @@ class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
   }
 
   Widget _crearFondo(BuildContext context){
+
     final size = MediaQuery.of(context).size; //PARA OCUPAR EL 40% DE LA PANTALLA
     final colorFondo = Container(
       height: size.height * 0.4,
@@ -71,7 +78,7 @@ class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
             children: [
               Icon(Icons.person_pin_circle, color: Colors.white, size: 100.0,),
               SizedBox(height: 10.0, width: double.infinity),
-              Text('Hora de crear su contraseña', style: TextStyle(color: Colors.white, fontSize: 25.0),)
+              Text('Bienvenido de nuevo', style: TextStyle(color: Colors.white, fontSize: 25.0),)
             ],
           ),
         )
@@ -80,7 +87,9 @@ class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
   }
 
   Widget _loginForm(BuildContext context){
+
     final size = MediaQuery.of(context).size;//SACAR DIMESIONES DE LA PANTALLA
+
     return SingleChildScrollView( //ME VA A PERMITIR HACER SCROLL DEPENDIENDO DEL TAMAÑO DEL HIJO
       child: Column(
         children: [
@@ -106,28 +115,47 @@ class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
               ]
 
             ),
-            child: Column
-            (children: [
-                Text('Ingrese su contraseña', style: TextStyle(fontSize: 20.0),),
+            child: Column(
+              children: [
+                Text('Ingreso', style: TextStyle(fontSize: 20.0),),
+                SizedBox(height: 60.0,),
+                _crearEmail(),
                 SizedBox(height: 30.0,),
-                _crearPassword(),
+                //_crearPassword(),
                 SizedBox(height: 30.0,),
-                //_botonIngresar(context),
-                Container(child: Text('Usuario -> ' + widget.correo))//Editado
+                //_botonIngresar(context)
               ],
             ),
           ),
+
+          _botonOlvidoPassword(context),
+          SizedBox( height: 100.0,)
         ],
       ),
     );
   }
 
-  
-  Widget _crearPassword() {
+
+
+  Widget _crearEmail() {
     return Form(
-      key: _key, //Editado
+      key: _key,
       child: Column(
         children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                icon: Icon(Icons.alternate_email, color: Colors.green[800], ),
+                hintText: 'nombre@correo.com',
+                labelText: 'Correo electronico',
+    
+              ),
+              controller: correoController, //Editado
+              validator: validarEmail,
+            ),
+          ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: TextFormField(
@@ -136,54 +164,70 @@ class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
                 icon: Icon(Icons.lock_outline, color: Colors.green[800], ),
                 labelText: 'Contraseña',
               ),
-              controller: contraseniaController,
+              controller: contraseniaController, //Editado
               validator: validarPassword,
             ),
           ),
           MaterialButton(
-            onPressed: () async { //Editado
-            if (_key.currentState!.validate()){ //Editado
-              try{ //Editado
-                await FirebaseAuth.instance.createUserWithEmailAndPassword( //METODO QUE CREA UNA NUEVA CUENTA EN EL PROYECTO DE FIREBASE Y LO LOGEA EN SEGUIDA
-                  email: widget.correo, //Editado
-                  password: contraseniaController.text //Editado
-                );
+            onPressed: () async {
+              if (_key.currentState!.validate()){ 
+                try{
+                  await FirebaseAuth.instance.signInWithEmailAndPassword( //INICIA SESION EN UNA CUENTA EXISTENTE DENTRO DEL PROYECTO DE FIREBASE
+                    email: correoController.text, 
+                    password: contraseniaController.text
+                  );
 
-                final rutaMenu = MaterialPageRoute(
+                
+
+                  final rutaMenu = MaterialPageRoute(
                         builder: (context){
                           return MenuPage();
                         }
                       );
                     Navigator.push( context, rutaMenu);
 
-
-                errorMensajeFirebase = '';
-              } on FirebaseAuthException catch (error){
-                errorMensajeFirebase = error.message!;
-              }
-              
-
-              setState(() {});//Editado
-
-
+                  errorMensajeFirebase = '';
+                }on FirebaseAuthException catch (error){
+                  errorMensajeFirebase = error.message!;
+                }
                 
-            }
+
+                setState(() {}); //Editado
+              }
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
               child: Text('Ingresar'),
             ),
-            shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(30.0), ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0), 
+            ),
             elevation: 0.0,
             color: Colors.green[800],
             textColor: Colors.white,
+            
           ),
 
-          Center(child: Text(errorMensajeFirebase),), //Editado
         ],
       ),
     );
   }
+
+
+
+  String? validarEmail(String? formularioEmail){ //Editado
+    if(formularioEmail ==null || formularioEmail.isEmpty){
+      return 'Correo electronico requerido';
+    }
+
+    String patron = r'\w+@\w+\.\w+';
+    RegExp regex = RegExp(patron);
+    if(!regex.hasMatch(formularioEmail)){
+      return 'Formato de Correo Electronico invalido.';
+    }
+      return null;
+  }
+
 
 
   String? validarPassword(String? formularioPassword){ //Editado
@@ -199,48 +243,28 @@ class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
       return null;
   }
 
-  
-  
-  
-  
-  
-  /*Widget _crearPassword() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock_outline, color: Colors.green[800], ),
-          labelText: 'Contraseña',
-        ),
-        controller: contraseniaController,
+
+  Widget _botonOlvidoPassword(BuildContext context){
+    return OutlinedButton(
+      onPressed: (){
+          final rutaRecuperarPassword = MaterialPageRoute(
+                builder: (context){
+                  return InicioSesionRecuperarPage();
+                }
+              );
+            Navigator.push( context, rutaRecuperarPassword);
+        
+        
+      },
+      child: Container(
+        //padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+        child: Text('Recuperar contraseña'),
+      ),
+      style: OutlinedButton.styleFrom(
+        primary: Colors.black87,
+        side: BorderSide(color: Colors.black87, width: 2.0),
+        //shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       ),
     );
   }
-
-  Widget _botonIngresar(BuildContext context){
-
-    return MaterialButton(
-      onPressed: () async { //Editado
-      await FirebaseAuth.instance.createUserWithEmailAndPassword( //Editado
-        email: widget.correo, //Editado
-        password: contraseniaController.text //Editado
-      );
-        final rutaMenu = MaterialPageRoute(
-                builder: (context){
-                  return MenuPage();
-                }
-              );
-            Navigator.push( context, rutaMenu);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-        child: Text('Ingresar'),
-      ),
-      shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(30.0), ),
-      elevation: 0.0,
-      color: Colors.green[800],
-      textColor: Colors.white,
-    );
-  }*/
 }

@@ -155,11 +155,11 @@ class ScrollPage extends StatelessWidget {
             children: [
               Image(image: AssetImage('assets/tcs_logo.png'), height: 200.0, width: 300.0),
               Expanded(child: Container()),
-              estiloBotones(context, Icons.account_box, 'Iniciar sesión', 'iniciar-sesion'),
+              estiloBotones(context, Icons.account_box, 'Iniciar sesión', 'iniciar_sesion'),
               Expanded(child: Container()),
               Divider(height: 20, thickness: 5, indent: 20, endIndent: 20),
               Expanded(child: Container()),
-              estiloBotones(context, Icons.create, 'Crear sesión', 'crear-sesion'),
+              estiloBotones(context, Icons.create, 'Crear sesión', 'crear_sesion'),
               Expanded(child: Container()),
             ],
           )
