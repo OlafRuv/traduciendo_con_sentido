@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tcs/router/app_routes.dart';
 
 import 'package:tcs/src/pages/login_section/inicio_sesion_recuperar_page.dart';
 import 'package:tcs/src/pages/menu_section/menu_page.dart';
@@ -176,15 +177,8 @@ class _InicioSesionPageState extends State<InicioSesionPage> {
                     email: correoController.text, 
                     password: contraseniaController.text
                   );
-
-                
-
-                  final rutaMenu = MaterialPageRoute(
-                        builder: (context){
-                          return MenuPage();
-                        }
-                      );
-                    Navigator.push( context, rutaMenu);
+                  // Navegamos a la ruta del menu principal
+                  Navigator.pushNamed(context, 'menu');
 
                   errorMensajeFirebase = '';
                 }on FirebaseAuthException catch (error){
@@ -247,15 +241,10 @@ class _InicioSesionPageState extends State<InicioSesionPage> {
   Widget _botonOlvidoPassword(BuildContext context){
     return OutlinedButton(
       onPressed: (){
-          final rutaRecuperarPassword = MaterialPageRoute(
-                builder: (context){
-                  return InicioSesionRecuperarPage();
-                }
-              );
-            Navigator.push( context, rutaRecuperarPassword);
-        
-        
+        // navegamos a la ruta de recuperar credenciales
+        Navigator.pushNamed(context, 'recuperar_credenciales');
       },
+
       child: Container(
         //padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
         child: Text('Recuperar contraseña'),

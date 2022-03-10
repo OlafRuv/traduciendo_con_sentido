@@ -19,6 +19,7 @@ class AppRoutes{
     MenuOption(route: 'menu',                   icon: Icons.menu_book_rounded,          name: 'Menu',                   screen: const MenuPage()),
     MenuOption(route: 'traducciones_guardadas', icon: Icons.save_alt_rounded,           name: 'Traducciones Guardadas', screen: const TraduccionesGuardadasPage()),
     MenuOption(route: 'configuracion',          icon: Icons.settings_rounded,           name: 'Configuracion',          screen: const ConfiguracionPage()),
+    MenuOption(route: 'recuperar_credenciales', icon: Icons.person_search_rounded,      name: 'Recuperar Credenciales', screen: const InicioSesionRecuperarPage()),
   ];
 
 // * Funcion que regresa todas las rutas disponibles
@@ -32,6 +33,14 @@ class AppRoutes{
     }
 
     return appRoutes;
+  }
+
+  static MenuOption? getAppRoute(String name){
+    for (final option in menuOptions){
+      if (name == option.name){
+        return option;
+      }
+    }
   }
 
 // * Esta es la funcion de generar ruta

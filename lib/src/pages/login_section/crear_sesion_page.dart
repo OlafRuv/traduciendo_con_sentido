@@ -149,6 +149,7 @@ class _CrearSesionPageState extends State<CrearSesionPage> {
           
           if (_key.currentState!.validate()){ //Editado
             correo = correoController.text; //Editado
+            // TODO: Revisar este caso de enrutamiento que recibe como parametro el correo
             final rutaVerificacion = MaterialPageRoute(
                   builder: (context){
                     //return CrearSesionVerificacionPage(); //Editado

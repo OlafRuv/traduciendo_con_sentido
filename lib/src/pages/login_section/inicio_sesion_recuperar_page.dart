@@ -163,12 +163,7 @@ class InicioSesionRecuperarPage extends StatelessWidget {
     actions: <Widget>[
       FlatButton(
         onPressed: () {
-          final rutaInicioSesion = MaterialPageRoute(
-                builder: (context){
-                  return InicioSesionPage();
-                }
-              );
-            Navigator.push( context, rutaInicioSesion);
+          Navigator.pushNamed( context, 'iniciar_sesion');
         },
         textColor: Theme.of(context).primaryColor,
         child: const Text('Continuar'),
