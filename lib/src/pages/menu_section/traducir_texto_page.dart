@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tcs/widgets/widgets.dart';
 
 
 class TraducirTextoPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
         ],
       ),
 
-      bottomNavigationBar: _bottomNavigationBar(context)
+      bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
 
@@ -221,51 +222,5 @@ Widget _tituloDescripcion(){
     ],
   );
 }
-
-
-
-  Widget _bottomNavigationBar( BuildContext context){ 
-  int _botonBarraActual = 0;
-  
-  List _listaPaginas = [ //Se usara para tomar la posicion del string y usarlo en el navigator
-    'menu',
-    'traducciones-guardadas',
-    'configuracion',
-  ];
-
-    return Theme( //LA UNICA FORMA DE CAMBIAR LAS PROPIEDADES DEL BOTTOMNAVIGATIONBAR IMPLICA CAMBIAR EL THEME
-      data: Theme.of(context).copyWith(
-        canvasColor: Colors.white,
-        unselectedWidgetColor: Colors.grey,
-      ),
-      
-      child: BottomNavigationBar(
-        fixedColor: Colors.green[800],
-        onTap: (index){ //Al hacer tap obtendra el index de la barra y se ira a la pagina requerida
-          setState(() {
-            _botonBarraActual = index;
-            Navigator.pushNamed(context, _listaPaginas[_botonBarraActual]);
-          });
-        },
-
-        currentIndex: _botonBarraActual, //se toma el indice actual  
-
-        items: [ //Todos los items de la barra de navegacion
-          BottomNavigationBarItem(
-            icon: Icon( Icons.home, size: 30.0,),
-            title: Text('Inicio'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon( Icons.list_alt, size: 30.0,),
-            title: Text('Trad. Guardadas'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon( Icons.supervised_user_circle, size: 30.0,),
-            title: Text('Configuracion'),
-          )
-        ], 
-      )
-    );
-  }
 
 }

@@ -24,7 +24,7 @@ class _MenuPageState extends State<MenuPage> {
           )
         ],
       ),
-      bottomNavigationBar: const CustomBottomNavigation(),
+      bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
 

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigation extends StatefulWidget {
-  const CustomBottomNavigation({Key? key}) : super(key: key);
+  final int botonBarraActual;
+  const CustomBottomNavigation(
+    {Key? key, required this.botonBarraActual}) : super(key: key);
 
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
 }
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
-  int botonBarraActual = 0;
   List listaPaginas = [
     //Se usara para tomar la posicion del string y usarlo en el navigator
     'menu',
@@ -19,13 +20,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: botonBarraActual,
+      currentIndex: widget.botonBarraActual,
       unselectedItemColor: Colors.grey,
       backgroundColor: Colors.white,
       selectedItemColor: Colors.green[800],
       onTap: (index){
         setState(() {
-          botonBarraActual = index;
+          // TODO: Hacer que la ruta no se se
           Navigator.pushNamed(context, listaPaginas[index]);
         });
       },

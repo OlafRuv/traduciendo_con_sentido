@@ -19,7 +19,7 @@ class LoginBloc {
 
   //METODO PARA CERRAR LOS CONTROLLER CUANDO NO SEAN NECESARIOS
   dispose() {
-    _emailController?.close(); //EL SIGNO DE INTERROGACION NOS SIRVE PARA EN EL CASO DE QUE SI ALGUN CONTROLLER FUERA NULL NO EJECUTA EL CLOSE()
-    _passwordController?.close();
+    _emailController.close(); //EL SIGNO DE INTERROGACION NOS SIRVE PARA EN EL CASO DE QUE SI ALGUN CONTROLLER FUERA NULL NO EJECUTA EL CLOSE()
+    _passwordController.close();
   }
 }
