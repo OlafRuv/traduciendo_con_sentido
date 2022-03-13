@@ -20,6 +20,8 @@ class AppRoutes{
     MenuOption(route: 'traducciones_guardadas', icon: Icons.save_alt_rounded,           name: 'Traducciones Guardadas', screen: const TraduccionesGuardadasPage()),
     MenuOption(route: 'configuracion',          icon: Icons.settings_rounded,           name: 'Configuracion',          screen: const ConfiguracionPage()),
     MenuOption(route: 'recuperar_credenciales', icon: Icons.person_search_rounded,      name: 'Recuperar Credenciales', screen: const InicioSesionRecuperarPage()),
+    MenuOption(route: 'politicas_uso',          icon: Icons.policy_rounded,             name: 'Politicas de Uso',       screen: const PoliticasDeUsoPage()),
+    MenuOption(route: 'politicas_privacidad',   icon: Icons.policy_rounded,             name: 'Poliricas de Privacidad',screen: const PoliticasDePrivacidadPage()),
   ];
 
 // * Funcion que regresa todas las rutas disponibles
