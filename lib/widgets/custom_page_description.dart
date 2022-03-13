@@ -14,10 +14,12 @@ class CustomPageDescription extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 title, 
+                textAlign: TextAlign.center,
                 style: const TextStyle( 
                   color: AppTheme.titleColor, 
                   fontSize: AppTheme.titleSize, 
