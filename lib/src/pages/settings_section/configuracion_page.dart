@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tcs/theme/app_theme.dart';
 
-import 'package:tcs/src/pages/scroll_section/scroll_page.dart';
-import 'package:tcs/src/pages/settings_section/politicas_uso_page.dart';
-import 'package:tcs/src/pages/settings_section/politicas_privacidad_page.dart';
 import 'package:tcs/widgets/widgets.dart';
 
-
+// Seccion de configuracion del usuario, Por el momento solo cuanta con la infomarcion del usuario mas basica, como su correo, y con los botones de politicas de uso y privacidad, ademas del boton de cerrar sesion
 class ConfiguracionPage extends StatefulWidget {
   const ConfiguracionPage({Key? key}) : super(key: key);
 
@@ -17,30 +15,48 @@ class ConfiguracionPage extends StatefulWidget {
 class _ConfiguracionPageState extends State<ConfiguracionPage> {
   @override
   Widget build(BuildContext context) { 
-    User? usuario = FirebaseAuth.instance.currentUser; //INSTANCIA QUE SE USARA PARA SABER SI EL USUARIO SE ENCUENTRA EN SESION
-    
+    User? usuario = FirebaseAuth.instance.currentUser; //instancia que se usara para saber si el usuario se encuentra en sesion
+  
     return Scaffold(
-      appBar: AppBar(
-        title: Text('CONFIGURACIÓN'),
-        backgroundColor: Colors.green[800],
+      appBar: AppBar( // App bar de la pagina
+        title: const Text('CONFIGURACIÓN'),
       ),
 
-      
       body: Stack(
         children: [
-          _fondoApp(),
-
-          SingleChildScrollView( //SIMILAR A LISTVIEW, LA DIFERENCIA ES QUE ABARCA TODA LA PANTALLA
+          SingleChildScrollView( //similar a listview, la diferencia es que abarca toda la pantalla
               child: Column(
                 children: [
-                  _tituloDescripcion(),
-                  Text('Usuario: ' + (usuario == null ? 'Usuario no registrado' : FirebaseAuth.instance.currentUser!.email.toString()), style: TextStyle(fontSize: 20.0),), //SI EL USUARIO SE ENCUENTRA EN SESION MOSTRARA EL CORREO DEL USUARIO Y SI ESTA EN NULL MOSTRARA QUE EL USUARIO NO ESTA REGISTRADO
-                  SizedBox(height: 30.0,),
-                  _botonPoliticasDePrivacidad(),
-                  SizedBox(height: 30.0,),
-                  _botonPoliticasDeUso(),
-                  SizedBox(height: 60.0,),
-                  _botonSalir(context)
+                  const CustomPageDescription(title: 'Configuración e información de usuario'), // Titulo o descripcion de la pagina
+                  const Text('Usuario:',
+                    style: TextStyle(fontSize: AppTheme.size20),
+                  ),
+                  // TODO: Debemos de sacar la llamada a la base de datos de aquí
+                  Text((usuario == null ? 'Usuario no registrado' : FirebaseAuth.instance.currentUser!.email.toString()), 
+                  style: const TextStyle(fontSize: AppTheme.size20),
+                  ), //si el usuario se encuentra en sesion mostrara el correo del usuario y si esta en null mostrara que el usuario no esta registrado
+                  // Politicas de uso y privacidad que se despliegan haciendo uso del widget de outlined button que creamos
+                  const SizedBox(height: 30.0,),
+                  const CustomOutlinedButton(textContent: 'Políticas de Privacidad',textSize: AppTheme.size20, route: 'politicas_privacidad'),
+                  const SizedBox(height: 30.0,),
+                  const CustomOutlinedButton(textContent: 'Políticas de uso',textSize: AppTheme.size20, route: 'politicas_uso'),
+                  // TODO: Editar para que sea una caja o alguna seccion expandida
+                  const SizedBox(height: 200.0,),
+                  // _botonSalir(context),  
+                  CustomButton( // Para cerrar sesion contamos con uno de nuestros cutom button hasta el fondo de la pagina
+                    padHButton: 80.0,
+                    padVButton: 20.0,
+                    buttontext: 'Cerrar Sesión', 
+                    colorButton: AppTheme.buttonColorv2,
+                    onPressedFunction: () async { 
+                      await FirebaseAuth.instance.signOut(); //metodo para que el usuario salga de la sesion de firebase
+                      setState(() {});
+                      Navigator.pushNamedAndRemoveUntil(
+                        context, 'scroll', 
+                        (route) => false
+                      );
+                    }
+                  ),
                 ],
               ),
             )
@@ -48,111 +64,6 @@ class _ConfiguracionPageState extends State<ConfiguracionPage> {
       ),
       bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 2),
     );
-  }
-
-
-
-  Widget _fondoApp(){
-    final fondo = Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-    );
-    
-    return Stack(
-      children: [
-        fondo,
-      ],
-    );
-  }
-
-  //SECCION DE TEXTO DE INICIO
-  Widget _tituloDescripcion(){
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Configuración e información de usuario', style:TextStyle( color: Colors.black87, fontSize: 30.0, fontWeight: FontWeight.bold),),
-              SizedBox( height: 10.0),
-            ],
-          )
-      ),
-    );
-  }
-
-
-
-  Widget _botonPoliticasDePrivacidad(){
-    return OutlinedButton(
-      onPressed: (){
-        final rutaPoliticasDePrivacidad = MaterialPageRoute(
-                builder: (context){
-                  return PoliticasDePrivacidadPage();
-                }
-              );
-            Navigator.push( context, rutaPoliticasDePrivacidad);
-      },
-      child: Container(
-        //padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-        child: Text('Politicas de privacidad', style: TextStyle(fontSize: 20.0),),
-      ),
-      style: OutlinedButton.styleFrom(
-        primary: Colors.black87,
-        side: BorderSide(color: Colors.black87, width: 3.0),
-        shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(5.0) ),
-      ),
-    );
-  }
-
-
-
-  Widget _botonPoliticasDeUso(){
-    return OutlinedButton(
-      onPressed: (){
-        final rutaPoliticasDeUso = MaterialPageRoute(
-                builder: (context){
-                  return PoliticasDeUsoPage();
-                }
-              );
-            Navigator.push( context, rutaPoliticasDeUso);
-      },
-      child: Container(
-        //padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-        child: Text('Politicas de uso', style: TextStyle(fontSize: 20.0),),
-      ),
-      style: OutlinedButton.styleFrom(
-        primary: Colors.black87,
-        side: BorderSide(color: Colors.black87, width: 3.0),
-        shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(5.0) ),
-      ),
-    );
-  }
-
-
-  Widget _botonSalir(BuildContext context){
-    return MaterialButton(
-          shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(30.0) ),
-          color: Colors.redAccent[700],
-          textColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-            child: Text('Salir', style: TextStyle(fontSize: 20.0),),
-          ),
-          onPressed: () async { 
-            await FirebaseAuth.instance.signOut(); //METODO PARA QUE EL USUARIO SALGA DE LA SESION DE FIREBASE
-            setState(() {});
-            final rutaScrollPage = MaterialPageRoute(
-                builder: (context){
-                  return ScrollPage();
-                }
-              );
-            Navigator.push( context, rutaScrollPage);
-          },
-        );
   }
 
 }
