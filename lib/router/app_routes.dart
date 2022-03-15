@@ -12,7 +12,7 @@ class AppRoutes{
   static const initialRoute = 'scroll';
   static final menuOptions = <MenuOption>[
     MenuOption(route: 'iniciar_sesion',         icon: Icons.account_box_rounded,        name: 'Inicio Sesion',          screen: const InicioSesionPage()),
-    MenuOption(route: 'crear_sesion',           icon: Icons.add_circle_outline_rounded, name: 'Crear Sesion',           screen: CrearSesionPage()),
+    MenuOption(route: 'crear_sesion',           icon: Icons.add_circle_outline_rounded, name: 'Crear Sesion',           screen: const CrearSesionPage()),
     MenuOption(route: 'traducir_texto',         icon: Icons.translate_rounded,          name: 'Traduccion Texto',       screen: const TraducirTextoPage()),
     MenuOption(route: 'traducir_documentos',    icon: Icons.document_scanner_rounded,   name: 'Traduccion Documentos',  screen: const TraducirDocumentosPage()),
     MenuOption(route: 'traducir_imagenes',      icon: Icons.image_rounded,              name: 'Traduccion Imagenes',    screen: const TraducirImagenesPage()),

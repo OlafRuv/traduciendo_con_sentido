@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tcs/router/app_routes.dart';
+import 'package:tcs/theme/app_theme.dart';
 
 void main() {
 // Nos aseguramos que todas las dependencias esten inicializadas antes de comenzar a lanzar los widgets
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       routes: AppRoutes.getAppRoutes(),
       // Rua default
       onGenerateRoute: AppRoutes.onGenerateRoute,
+      theme: AppTheme.lightTheme,
     );
   }
 }
