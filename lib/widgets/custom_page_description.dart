@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tcs/theme/app_theme.dart';
 
+//Este es un breve widget que sirve para estandarizar las descripciones de todas las paginas dentro del funcionamiento principal de la aplicacion 
 class CustomPageDescription extends StatelessWidget {
   final String title;
   const CustomPageDescription({
@@ -10,6 +11,7 @@ class CustomPageDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Se construye un safe area en el cual se inserta un titulo estilizado y listo
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(20.0),
