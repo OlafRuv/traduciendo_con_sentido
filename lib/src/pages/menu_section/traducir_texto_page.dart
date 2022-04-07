@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:tcs/utils/validators.dart';
 import 'package:tcs/widgets/widgets.dart';
-
 
 class TraducirTextoPage extends StatefulWidget {
   const TraducirTextoPage({Key? key}) : super(key: key);
@@ -14,161 +15,139 @@ class TraducirTextoPage extends StatefulWidget {
 class _TraducirTextoPageState extends State<TraducirTextoPage> {
   final guardarTextoController = TextEditingController();
   final guardarTituloControllerPopUp = TextEditingController();
-  
+  String _enteredText = '';
+  String _brailleText = '';
+  String _descriptionText = '';
+
+  @override
+  void initState() {
+    super.initState(); 
+    Future(_showDialog);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TRADUCIR TEXTO'),
+        title: const Text('TRADUCIR TEXTO'),
         backgroundColor: Colors.green[800],
       ),
       body: Stack(
         children: [
-          _fondoApp(),
           SingleChildScrollView(
             child: Column(
               children: [
-                _tituloDescripcion(),
-                _ingresoCuadroTexto(),
-                SizedBox(height: 20.0,),
+                  _entradaTexto(),
+                  const Divider(),
+                  _salidaBraile(),
                 _botones(),
-                SizedBox(height: 60.0,),
-                SizedBox(height: 60.0,),
-                _salidaCuadroTexto()
               ],
             ),
           )
         ],
       ),
 
-      bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
+      // bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
 
-
-
-
-
-Widget _fondoApp(){
-    final fondo = Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-    );
-    
-    return Stack(
-      children: [
-        fondo,
-      ],
-    );
+  Padding _salidaBraile() {
+    return Padding(
+                  padding: const EdgeInsets.all(20.0), 
+                  child: TextField(
+                    maxLines: 5,
+                    autocorrect: true,
+                    enabled: false,
+                    style: const TextStyle(fontFamily: 'braile_font',fontSize: 20, height: 1.5),
+                      decoration: InputDecoration(
+                        hintStyle: const TextStyle(color: Colors.black),
+                        hintText: _brailleText,
+                        border: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(),
+                        disabledBorder: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(),
+                    ),
+                  ),
+                );
   }
 
-
+  Padding _entradaTexto() {
+    return Padding(
+                  padding: const EdgeInsets.all(20.0), 
+                  child: TextField(
+                    maxLines: 5,
+                    maxLength: 500,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    autocorrect: true,
+                    controller: guardarTextoController,
+                    // style: TextStyle(fontFamily: 'braile_font'),
+                    decoration:  InputDecoration(
+                      hintText: 'Introduzca su texto\nMáximo 500 palabras',
+                      helperText: 'Cuando termine puede\nTraducir o Guardar',
+                      counterText: '${_enteredText.length.toString()}/500 Carácteres',
+                      border: const OutlineInputBorder(),
+                      focusedBorder: const OutlineInputBorder(),
+                      disabledBorder: const OutlineInputBorder(),
+                      enabledBorder: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _enteredText = value;
+                      });
+                    },
+                  ),
+                );
+  }
   
-
-Widget _tituloDescripcion(){
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Haga click en el cuadro de texto para teclear su texto deseado y usar los botones para traducir o guardar traduccion', style:TextStyle( color: Colors.black87, fontSize: 20.0, fontWeight: FontWeight.bold),),
-              SizedBox( height: 10.0),
-            ],
-          )
-      ),
+  void _showDialog(){
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => 
+      CustomPopUp(
+        title: 'Traduccion de Texto Plano', 
+        content: const Text('Haga click en el cuadro de texto para teclear su texto deseado y usar los botones para traducir o guardar traduccion',
+          textAlign: TextAlign.justify,
+          style: TextStyle(fontSize: 20)
+        ), 
+        buttonText: 'Continuar',
+        onPressedFunction: () {
+          Navigator.pop(context);
+        }
+      )
     );
   }
-
-
-
-
-
-  Widget _ingresoCuadroTexto(){
-    String textoIngresado = "";
-
-    return Container(
-      child: TextFormField(
-        onChanged: (texto) {
-          textoIngresado = texto;
-        },
-        decoration: InputDecoration(
-          hintText: 'Ingresar',
-          contentPadding: EdgeInsets.all(20),
-        ),
-        controller: guardarTextoController,
-      ),
-    );
-  }
-
-
 
   Widget _botones(){
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MaterialButton(
-          shape: StadiumBorder(),
-          color: Colors.green[800],
-          textColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            child: Text('Traducir', style: TextStyle(fontSize: 20.0),),
-          ),
-          onPressed: (){
-            //navegar
-          },
-        ),
-        SizedBox(width: 10.0,),
-        MaterialButton(
-          shape: StadiumBorder(),
-          color: Colors.green[800],
-          textColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-            child: Text('Guardar', style: TextStyle(fontSize: 20.0),),
-          ),
-          onPressed: (){           
-            showDialog( //ALERTA DIALOG QUE NOS SERVIRA PARA ALERTAR AL USUARIO QUE SE GUARDO CON EXITO SU TEXTO
-              context: context, 
-              builder: (BuildContext context) => _popUpTextoGuardado(context)
-            );
-            //navegar
-          },
+        CustomButton(
+          buttontext: 'Traducir', 
+          onPressedFunction: (){
+            _brailleText = _enteredText;
+            setState(() { });
+          }, 
+          padHButton: 20, 
+          padVButton: 20),  
+        const SizedBox(width: 10.0,),
+        CustomButton(
+          buttontext: 'Guardar', 
+          onPressedFunction: (){
+            // showDialog( //ALERTA DIALOG QUE NOS SERVIRA PARA ALERTAR AL USUARIO QUE SE GUARDO CON EXITO SU TEXTO
+            _popUpGuardarTexto();
+          }, 
+          padHButton: 20, 
+          padVButton: 20,
         ),
       ],
     );
   }
 
-
-
-  Widget _salidaCuadroTexto(){
-    String textoIngresado = "";
-
-    return Container(
-      child: TextField(
-        onChanged: (texto) {
-          textoIngresado = texto;
-        },
-        decoration: InputDecoration(
-          hintText: 'Traducción',
-          contentPadding: EdgeInsets.all(20),
-        ),
-      ),
-    );
-  }
-
-
-
+  // TODO: Integrar la descripcion al registro de FIREBASE
   Future<void> escrituraFirestore( String guardarTextoFirestore, String guardarTituloFirestore) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     String identificadorCorreo = auth.currentUser!.email.toString();
     String identificadorUid = auth.currentUser!.uid.toString();
-
     CollectionReference coleccionUsuarios = FirebaseFirestore.instance.collection('usuarios');
     
     coleccionUsuarios.add({
@@ -178,49 +157,55 @@ Widget _tituloDescripcion(){
       'Uid' : identificadorUid, //INGRESA EN EL CAMPO UID NUESTRO IDENTIFICADOR DE USUARIO
     });
 
-
     return;
   }
 
-
-//POPUP QUE APARECERA CUANDO SE GUARDE EL TEXTO
-  Widget _popUpTextoGuardado(BuildContext context) {
-  String textoIngresadoPopUp = "";
-  return AlertDialog(
-    title: const Text('Ingrese un titulo para su traducción'),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        TextFormField(
-        onChanged: (texto) {
-          textoIngresadoPopUp = texto;
-        },
-        decoration: InputDecoration(
-          hintText: 'Ingresa tu titulo deseado',
-          contentPadding: EdgeInsets.all(20),
+  void _popUpGuardarTexto(){
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => 
+      CustomPopUp(
+        title: 'Guardar Traducción', 
+        content: Column(
+          children: [
+            TextFieldForm(
+              labelText: 'Nombre Traduccion',
+              hintText: 'Ingrese el nombre',
+              icon: Icons.app_registration_rounded, 
+              obscureText: false, 
+              validator: validarVacio, 
+              hasNextFocus: true,
+              controller: guardarTituloControllerPopUp,
+            ),
+            TextField(
+              maxLines: 3,
+              maxLength: 100,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
+              autocorrect: true,
+              // controller: controllerDescripcion,
+              decoration:  InputDecoration(
+                hintText: 'Introduzca su descripcion\nMáximo 100 palabras',
+                counterText: '${_descriptionText.length.toString()}/100 Carácteres',
+                border: const OutlineInputBorder(),
+                focusedBorder: const OutlineInputBorder(),
+                disabledBorder: const OutlineInputBorder(),
+                enabledBorder: const OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _descriptionText = value;
+                });
+              },
+            ),
+          ],
         ),
-        controller: guardarTituloControllerPopUp,
-      ),
-        Text("Usted podra consultar su texto guardado en la opción de Traducciones guardadas"),
-      ],
-    ),
-    actions: <Widget>[
-      MaterialButton(
-        onPressed: () {
+        buttonText: 'Guardar',
+        onPressedFunction:  () {
           escrituraFirestore(guardarTextoController.text, guardarTituloControllerPopUp.text);
-          final rutaTraducirTexto = MaterialPageRoute(
-                builder: (context){
-                  return TraducirTextoPage();
-                }
-              );
-            Navigator.push( context, rutaTraducirTexto);
-        },
-        textColor: Theme.of(context).primaryColor,
-        child: const Text('Continuar'),
-      ),
-    ],
-  );
-}
+          Navigator.pushNamed(context,'traducciones_guardadas');
+        }
+      )
+    );
+  }
 
 }
