@@ -4,7 +4,7 @@ import 'package:tcs/theme/app_theme.dart';
 // Este widget nos sirve como plantilla para todos los campos de captura de credenciales con los que cuenta la aplicacion
 class TextFieldForm extends StatelessWidget {
   final TextEditingController? controller;
-  final IconData icon;
+  final IconData? icon;
   final Widget? suffixicon;
   final bool obscureText;
   final TextInputType? keyboardType;
@@ -18,7 +18,7 @@ class TextFieldForm extends StatelessWidget {
   const TextFieldForm({ // Se construye el campo de texto 
     Key? key, 
     this.controller, 
-    required this.icon, 
+    this.icon, 
     this.suffixicon, 
     required this.obscureText, 
     this.keyboardType, 
@@ -55,8 +55,7 @@ class TextFieldForm extends StatelessWidget {
           hintText: hintText,
           labelText: labelText,
           suffixIcon: suffixicon,
-          icon: Icon(icon,color: AppTheme.primary,
-          ),
+          icon: Icon(icon, color: AppTheme.primary,),
         ),
       ),
     );

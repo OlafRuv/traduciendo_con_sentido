@@ -2,13 +2,19 @@ String? validarEmail(String? formularioEmail){ //Editado
   if(formularioEmail ==null || formularioEmail.isEmpty){
     return 'Correo electronico requerido';
   }
-
-  String patron = r'\w+@\w+\.\w+';
-  RegExp regex = RegExp(patron);
+String patron = r'\w+@\w+\.\w+';
+RegExp regex = RegExp(patron);
   if(!regex.hasMatch(formularioEmail)){
     return 'Formato de Correo Electronico invalido.';
   }
     return null;
+}
+
+String? validarVacio(String? value){
+  if (value == null || value.isEmpty){
+    return 'Debe de ingresar un valor';
+  }
+  return null;
 }
 
 String? validarPassword(String? formularioPassword){ //Editado
@@ -16,7 +22,7 @@ String? validarPassword(String? formularioPassword){ //Editado
     return 'Contraseña requerida';
   }
 
-  String patron = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~.]).{6,}$';
+String patron = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~.]).{6,}$';
   RegExp regex = RegExp(patron);
   if(!regex.hasMatch(formularioPassword)){
     return 'La contraseña debe de tener al menos 6 caracteres, incluyendo alguna letra mayuscula, minuscula, numero y simbolo';
