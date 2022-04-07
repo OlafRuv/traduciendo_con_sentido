@@ -122,6 +122,7 @@ class ScrollPage extends StatelessWidget {
                 ]
                 ,
                 const Text('Desliza a la izquierda', style: estiloTexto,), // GIF PARA MOSTRAR HACIA DONDE DESLIZAR
+                // const Text('Desliza a la izquierda', style: TextStyle(fontFamily: 'BRAILLE1')), // GIF PARA MOSTRAR HACIA DONDE DESLIZAR
                 const Image(
                   image: AssetImage('assets/Swipe_Left.gif'),
                   height:100.0

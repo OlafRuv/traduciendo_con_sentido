@@ -59,7 +59,10 @@ class InicioSesionRecuperarPage extends StatelessWidget {
                 builder: (BuildContext context) => 
                 CustomPopUp(
                   title: 'Se envio la contraseña a su correo', 
-                  message: 'Una vez consultada su contraseña por favor ingresela en el inicio de sesión', 
+                  content: const Text('Una vez consultada su contraseña por favor ingresela en el inicio de sesión',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(fontSize: 20)
+                  ), 
                   buttonText: 'Continuar',
                   onPressedFunction: () {
                     Navigator.pushNamed( 

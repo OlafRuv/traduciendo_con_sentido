@@ -26,6 +26,21 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
     
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('TRADUCIONES GUARDADAS'),
+      ),
+      body: Stack(
+        children: [
+          // _fondoApp(),
+          mostrarTraduccionesGuardadas()
+        ] 
+      ),
+      bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 1),
+    );
+  }
 
 
   Widget mostrarTraduccionesGuardadas(){
@@ -33,13 +48,12 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
         stream: _usersStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return const Text('Something went wrong');
           }
       
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+            return const Text("Loading");
           }
-          
           
           return ListView(
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
@@ -59,12 +73,7 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
                           actions: [
                             MaterialButton(
                               onPressed: () {
-                                final rutaTraduccionesGuardadas = MaterialPageRoute(
-                                      builder: (context){
-                                        return TraduccionesGuardadasPage();
-                                      }
-                                    );
-                                  Navigator.push( context, rutaTraduccionesGuardadas);
+                                  Navigator.pushNamed( context, 'traducciones_guardadas');
                               },
                               textColor: Theme.of(context).primaryColor,
                               child: const Text('Cancelar'),
@@ -73,12 +82,7 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
                               onPressed: () {
                                 print("DOCUMENTO ELIMINDADO: " + document.id);
                                 FirebaseFirestore.instance.collection('usuarios').doc(document.id).delete(); //GRACIAS A QUE ACCEDEMOS MEDIANTE EL ID DEL DOCUMENTO, LA ELIMINACION ES MAS SENCILLA
-                                final rutaTraduccionesGuardadas = MaterialPageRoute(
-                                      builder: (context){
-                                        return TraduccionesGuardadasPage();
-                                      }
-                                    );
-                                  Navigator.push( context, rutaTraduccionesGuardadas);
+                                  Navigator.pushNamed( context, 'traducciones_guardadas');
                               },
                               textColor: Theme.of(context).primaryColor,
                               child: const Text('Eliminar'),
@@ -125,62 +129,7 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
           );
   }
 
-
-
   
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('TRADUCIONES GUARDADAS'),
-        backgroundColor: Colors.green[800],
-      ),
-      body: Stack(
-        children: [
-          // _fondoApp(),
-          mostrarTraduccionesGuardadas()
-        ] 
-      ),
-      bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 1),
-    );
-  }
-
-
-
-
-  Widget _fondoApp(){
-    final fondo = Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-    );
-
-    return Stack(
-      children: [
-        fondo,
-      ],
-    );
-  }
-
-
-  //SECCION DE TEXTO DE INICIO
-  Widget _tituloDescripcion(){
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Documentos de traducciones guardadas', style:TextStyle( color: Colors.black87, fontSize: 30.0, fontWeight: FontWeight.bold),),
-              SizedBox( height: 10.0),
-            ],
-          )
-      ),
-    );
-  }
-
  // TODO: Hacer widget de POPuP
   //POPUP QUE APARECERA CUANDO QUIERA ELIMINARSE EL REGISTRO DESEADO
   Widget popUpEliminarRegistro(BuildContext context) {
@@ -191,7 +140,7 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
         onPressed: () {
           final rutaTraduccionesGuardadas = MaterialPageRoute(
                 builder: (context){
-                  return TraduccionesGuardadasPage();
+                  return const TraduccionesGuardadasPage();
                 }
               );
             Navigator.push( context, rutaTraduccionesGuardadas);
@@ -203,7 +152,7 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
         onPressed: () {
           final rutaTraduccionesGuardadas = MaterialPageRoute(
                 builder: (context){
-                  return TraduccionesGuardadasPage();
+                  return const TraduccionesGuardadasPage();
                 }
               );
             Navigator.push( context, rutaTraduccionesGuardadas);

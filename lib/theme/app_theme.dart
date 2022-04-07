@@ -88,6 +88,13 @@ class AppTheme{
       ),
     ),
 
+    // Text Selection Theme
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: primary,
+      selectionColor: primary,
+      selectionHandleColor: primary,
+    ),
+
     // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       labelStyle: TextStyle(color: primary),
