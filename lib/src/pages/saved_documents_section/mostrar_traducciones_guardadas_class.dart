@@ -8,9 +8,12 @@ class MostrarTraduccionesGuardadasClass {
     List itemsList = [];
     try{
       await profileList.get().then((querySnapshot){
-        querySnapshot.docs.forEach((element){
+        // querySnapshot.docs.forEach((element){
+        //   itemsList.add(element.data);
+        // });
+        for (var element in querySnapshot.docs) {
           itemsList.add(element.data);
-        });
+        }
       });
       return itemsList;
     } catch(e) {
