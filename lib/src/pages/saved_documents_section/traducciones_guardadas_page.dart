@@ -1,5 +1,5 @@
-import 'dart:io';
-import 'dart:typed_data';
+// import 'dart:io';
+// import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -77,10 +77,8 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
                                 builder: (BuildContext context) => 
                                 AlertDialog(
                                 title: const Text('Texto de traducción'),
-                                content: Container(
-                                  child: SingleChildScrollView(
-                                    child: Text(data['Texto_guardado'], style: const TextStyle(fontFamily: 'braile_font',fontSize: 20, height: 1.5)), //MOSTRARA EL TEXTO DE NUESTRO ELEMENTO SELECCIONADO DE FIRESTORE
-                                  )
+                                content: SingleChildScrollView(
+                                  child: Text(data['Texto_guardado'], style: const TextStyle(fontFamily: 'braile_font',fontSize: 20, height: 1.5)), //MOSTRARA EL TEXTO DE NUESTRO ELEMENTO SELECCIONADO DE FIRESTORE
                                 ),
                                 actions: [
                                   MaterialButton(
@@ -122,7 +120,7 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
                                   ),
                                   MaterialButton(
                                     onPressed: () {
-                                      print("DOCUMENTO ELIMINDADO: " + document.id);
+                                      // print("DOCUMENTO ELIMINDADO: " + document.id);
                                       FirebaseFirestore.instance.collection('usuarios').doc(document.id).delete(); //GRACIAS A QUE ACCEDEMOS MEDIANTE EL ID DEL DOCUMENTO, LA ELIMINACION ES MAS SENCILLA
                                         Navigator.pushNamed( context, 'traducciones_guardadas');
                                     },
