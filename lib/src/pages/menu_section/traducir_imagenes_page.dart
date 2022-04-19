@@ -60,7 +60,7 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
         )
       ),
 
-      bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
+      // bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
 
