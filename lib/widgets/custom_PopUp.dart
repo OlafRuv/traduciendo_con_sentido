@@ -23,16 +23,16 @@ class CustomPopUp extends StatelessWidget {
     return AlertDialog( //  Se construye el popup y se regresa como un alert dialog
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(32.0))),
-    title: Center(
-      child: Text(
-        title,
-        textAlign: TextAlign.center, 
-        style: TextStyle(
-          fontSize: 24,
-          color: AppTheme.primary,
+    title:Center(
+        child: Text(
+          title,
+          textAlign: TextAlign.center, 
+          style: TextStyle(
+            fontSize: 24,
+            color: AppTheme.primary,
+          ) 
         )
       ),
-    ),
     // title: Text(title),
     content: Column(
       mainAxisSize: MainAxisSize.min,
