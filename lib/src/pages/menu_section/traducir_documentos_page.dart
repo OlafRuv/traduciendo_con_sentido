@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:tcs/theme/app_theme.dart';
+import 'package:tcs/utils/validators.dart';
 import 'package:tcs/widgets/widgets.dart';
-
+import 'package:file_picker/file_picker.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class TraducirDocumentosPage extends StatefulWidget {
   const TraducirDocumentosPage({Key? key}) : super(key: key);
@@ -10,137 +14,285 @@ class TraducirDocumentosPage extends StatefulWidget {
 }
 
 class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
+  String _text = "";
+  int _size = 0;
+  String name = "";
+  String _trimedText = "";
+  String _descriptionText = '';
+  final guardarTextoController = TextEditingController();
+  final guardarTituloControllerPopUp = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    Future(_showDialog);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TRADUCIR DOCUMENTOS'),
-        backgroundColor: Colors.green[800],
+        // textDirection: TextDirection.rtl,
+        title: const Text('TRADUCIR DOCUMENTOS'),
       ),
       body: Stack(
         children: [
-          _fondoApp(),
           SingleChildScrollView(
             child: Column(
               children: [
-                _tituloDescripcion(),
-                _botonSeleccionarArchivo(),
-                SizedBox(height: 60.0,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: _botonSeleccionarArchivo(),
+                ),
+                Text(
+                  'TEXTO DE EJEMPLO TRADUCIDO',
+                  style: TextStyle(color: AppTheme.primary, fontSize: 20.0),
+                ),
+                Padding(
+                    child: Text(
+                      // ignore: prefer_is_empty
+                      _text.length == 0
+                          ? "Seleccione su PDF y espere a que cargue..."
+                          : "PDF cargado, $_size página\n",
+                      style: const TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    padding: const EdgeInsets.only(top: 10.0)),
+                _salidaTexto(true),
                 _botones(),
-                SizedBox(height: 60.0,),
-                SizedBox(height: 60.0,),
-                _salidaCuadroTexto()
               ],
             ),
           ),
         ],
       ),
-      
-      bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
+      // bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
 
-Widget _fondoApp(){
-    final fondo = Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-    );
-    
-    return Stack(
-      children: [
-        fondo,
-      ],
-    );
+  Future _pickPDFText() async {
+    try {
+      FilePickerResult? filePickerResult =
+          await FilePicker.platform.pickFiles();
+      if (filePickerResult != null) {
+        PdfDocument document = PdfDocument(
+            inputBytes:
+                await _readDocumentData(filePickerResult.files.single.path!));
+        PdfTextExtractor extractor = PdfTextExtractor(document);
+        _size = document.pages.count;
+        _text = extractor.extractText();
+        _showResult(_text);
+        setState(() {});
+        _trimedText = _text.replaceAll("\n", " ");
+        // print(_trimedText);
+      }
+    } catch (e) {
+      name = "Error occured while scanning";
+      _text = name;
+      setState(() {});
+    }
   }
 
+  Future<List<int>> _readDocumentData(String name) async {
+    final ByteData data = await rootBundle.load(name);
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
 
-  Widget _tituloDescripcion(){
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Haga click en el boton de seleccionar para poder traducir su documento al cuadro de texto o mandar a imprimir', style:TextStyle( color: Colors.black87, fontSize: 20.0, fontWeight: FontWeight.bold),),
-              SizedBox( height: 10.0),
-              //Text('Classify this transaccion into a particular category', style:TextStyle( color: Colors.white, fontSize: 18.0, )),
+  void _showResult(String text) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Texto Extraido'),
+            content: Scrollbar(
+              child: SingleChildScrollView(
+                child: Text(text),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
             ],
-          )
+          );
+        });
+  }
+
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => CustomPopUp(
+            title: 'Traduccion de Documentos',
+            content: const Text(
+                'Haga click en el boton de seleccionar para poder traducir su documento al cuadro de texto o mandar a imprimir',
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: 20)),
+            buttonText: 'Continuar',
+            onPressedFunction: () {
+              Navigator.pop(context);
+            }));
+  }
+
+  _botonSeleccionarArchivo() {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      CustomButton(
+        buttontext: 'Seleccionar Archivo',
+        onPressedFunction: _pickPDFText,
+        padHButton: 20,
+        padVButton: 20,
+        iconData: Icons.folder_open_rounded,
+        iconSize: 30,
       ),
-    );
+    ]);
   }
 
-
-
-  _botonSeleccionarArchivo(){
-    return MaterialButton(
-          shape: StadiumBorder(),
-          color: Colors.green[800],
-          textColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            child: Text('Seleccionar Archivo', style: TextStyle(fontSize: 20.0),),
-          ),
-          onPressed: (){
-            //navegar
-          },
-        );
-  }
-
-
-  Widget _botones(){
+  Widget _botones() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        MaterialButton(
-          shape: StadiumBorder(),
-          color: Colors.green[800],
-          textColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            child: Text('Traducir', style: TextStyle(fontSize: 20.0),),
-          ),
-          onPressed: (){
-            //navegar
-          },
+        CustomButton(
+          buttontext: 'Guardar',
+          onPressedFunction: _popUpGuardarTexto,
+          padHButton: 20,
+          padVButton: 20,
+          iconData: Icons.save_rounded,
+          iconSize: 30,
         ),
-        SizedBox(width: 10.0,),
-        MaterialButton(
-          shape: StadiumBorder(),
-          color: Colors.green[800],
-          textColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-            child: Text('Imprimir', style: TextStyle(fontSize: 20.0),),
-          ),
-          onPressed: (){
-            //navegar
-          },
+        const SizedBox(width: 10),
+        // ******************************************* Este boton debe de imprimir y de guardar la traduccion
+        CustomButton(
+          buttontext: 'Descargar',
+          onPressedFunction: _descargar,
+          padHButton: 20,
+          padVButton: 20,
+          iconData: Icons.download_for_offline_rounded,
+          iconSize: 30,
         ),
       ],
     );
   }
 
-
-
-
-  Widget _salidaCuadroTexto(){
-    String textoIngresado = "";
-
-    return Container(
+  Widget _salidaTexto(bool braile) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
       child: TextField(
-        onChanged: (texto) {
-          textoIngresado = texto;
-        },
+        maxLines: 5,
+        autocorrect: true,
+        enabled: false,
+        style: braile
+            ? const TextStyle(
+                fontFamily: 'braile_font', fontSize: 20, height: 1.5)
+            : const TextStyle(fontSize: 20, height: 1.5),
         decoration: InputDecoration(
-          hintText: 'Traducción',
-          contentPadding: EdgeInsets.all(20),
+          hintStyle: const TextStyle(color: Colors.black),
+          // hintText: _text,
+          hintText: _trimedText,
+          border: const OutlineInputBorder(),
+          focusedBorder: const OutlineInputBorder(),
+          disabledBorder: const OutlineInputBorder(),
+          enabledBorder: const OutlineInputBorder(),
         ),
       ),
     );
   }
-  
+
+  void _descargar(){
+    showDialog(context: context, 
+    builder: (BuildContext context) => 
+      CustomPopUp(
+        title: 'Seleccione una opción',
+        buttonText: 'Cancelar',
+        onPressedFunction: (){Navigator.pop(context);},
+        content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: (){}, 
+                child: const Text('Descargar PDF',
+                style: TextStyle(
+                  fontSize: AppTheme.size18,
+                  color: Colors.black,)
+                  )
+                ),
+              const Divider(),
+              TextButton(
+                onPressed: (){}, 
+                child: const Text('Descargar PDF espejo',
+                style: TextStyle(
+                  fontSize: AppTheme.size18,
+                  color: Colors.black,),
+                ),
+              ),
+              const Divider(), 
+              TextButton(
+                onPressed: (){}, 
+                child: const Text('Descargar .brf',
+                style:  TextStyle(
+                  fontSize: AppTheme.size18,
+                  color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+        ),
+      ),
+    );
+  }
+
+  void _popUpGuardarTexto() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => CustomPopUp(
+            title: 'Guardar Traducción',
+            content: Form(
+              key: _key,
+              child: Column(
+                children: [
+                  TextFieldForm(
+                    labelText: 'Nombre Traduccion',
+                    hintText: 'Ingrese el nombre',
+                    icon: Icons.app_registration_rounded,
+                    obscureText: false,
+                    validator: validarVacio,
+                    hasNextFocus: true,
+                    controller: guardarTituloControllerPopUp,
+                  ),
+                  TextFormField(
+                    maxLines: 3,
+                    maxLength: 100,
+                    validator: validarVacio,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    autocorrect: true,
+                    // controller: controllerDescripcion,
+                    decoration: InputDecoration(
+                      hintText:
+                          'Introduzca su descripcion\nMáximo 100 palabras',
+                      counterText:
+                          '${_descriptionText.length.toString()}/100 Carácteres',
+                      border: const OutlineInputBorder(),
+                      focusedBorder: const OutlineInputBorder(),
+                      disabledBorder: const OutlineInputBorder(),
+                      enabledBorder: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _descriptionText = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            buttonText: 'Guardar',
+            onPressedFunction: () {
+              if (_key.currentState!.validate()) {
+                Navigator.pushNamed(context, 'traducciones_guardadas');
+              }
+            }));
+  }
 }
