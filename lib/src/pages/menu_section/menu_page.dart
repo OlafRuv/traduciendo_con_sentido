@@ -12,177 +12,178 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // TODO: Revisar que es lo que hace el fondo app
-          _fondoApp(),
-          SingleChildScrollView(
-            //SIMILAR A LISTVIEW, LA DIFERENCIA ES QUE ABARCA TODA LA PANTALLA
-            child: Column(
-              children: [_tituloDescripcion(), _botonesMenu(context)],
-            ),
-          )
-        ],
+      body: SingleChildScrollView(
+        //SIMILAR A LISTVIEW, LA DIFERENCIA ES QUE ABARCA TODA LA PANTALLA
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // const SizedBox(height: 50,),
+              // _tituloDescripcion(), 
+              Container(
+                child: const Image(image: AssetImage('assets/TraduciendoConSentidoSml.png'),height:220.0),
+                  padding: const EdgeInsets.only(top: 0,bottom:0),
+                  width:MediaQuery.of(context).size.width * 1,
+                decoration: BoxDecoration(
+                  // color: Colors.green[400],
+                  gradient: LinearGradient(
+                    colors: [
+                      // AppTheme.grad1,
+                      // AppTheme.grad2,
+                      Colors.green[400]!,
+                      Colors.green[800]!,
+                    ]
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(80), 
+                    bottomRight: Radius.circular(80)
+                  ),
+                ),
+              ),
+                // height: 100.0,
+              _botonesMenu()
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
 
-  //ESTILO Y FORMA DEL FONDO DE LA PANTALLA
-  Widget _fondoApp() {
-    final fondo = Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(color: Colors.white),
-    );
-
-    return Stack(
-      children: [
-        fondo,
-      ],
-    );
-  }
-
-  //SECCION DE TEXTO DE INICIO
-  Widget _tituloDescripcion() {
-    return SafeArea(
-      child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Menú de opciones',
-                style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10.0),
-              //Text('Classify this transaccion into a particular category', style:TextStyle( color: Colors.white, fontSize: 18.0, )),
-            ],
-          )),
-    );
-  }
-
   //SECCION DONDE SE LLAMARAN A LAS FUNCIONES DE LOS BOTONES
-  Widget _botonesMenu(BuildContext context) {
-    return Table(
-      children: [
-        TableRow(children: [
-          _crearBotonMenu(context, Colors.white, Icons.text_fields,
-              'Traducir texto plano', 'traducir_texto'),
-        ]),
-        TableRow(children: [
-          _crearBotonMenu(context, Colors.white, Icons.folder,
-              'Traducir documentos', 'traducir_documentos'),
-        ]),
-        TableRow(children: [
-          _crearBotonMenu(context, Colors.white, Icons.image,
-              'Traducir texto en imagenes', 'traducir_imagenes'),
-        ]),
-      ],
-    );
-  }
-
-  //CREACION DE CONTAINERS EN FORMA DE BOTONES EN LA SECCION DEL CUERPO DE LA APLICACION
-  Widget _crearBotonMenu(BuildContext context, Color color, IconData icono,
-      String texto, String ruta) {
-    return //BackdropFilter( // hace que todo lo que quede atras quede como borroso
-        //filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), //EL BLUR CONSUME RECURSOS, (POSIBLE ELIMINACION)
-        //child:
-        InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, ruta);
-      },
-      child: Container(
-        height: 160.0,
-        margin: EdgeInsets.all(15.0),
-        decoration: BoxDecoration(
-            color: Colors.green[800],
-            borderRadius: BorderRadius.circular(20.0)),
-
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(height: 5.0),
-            CircleAvatar(
-              backgroundColor:
-                  color, //SE PONE EL COLOR QUE ESTAMOS RECIBIENDO EN EL PARAMETRO
-              radius: 40.0,
-              child: Icon(
-                icono,
-                color: Colors.black87,
-                size: 40.0,
-              ), //SE PONE EL ICONO QUE ESTAMOS RECIBIENDO EN EL PARAMETRO
+  Widget _botonesMenu() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, 'traducir_texto');
+            },
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), 
+                  bottomLeft: Radius.circular(50), 
+                  topRight: Radius.circular(50),
+                  bottomRight: Radius.circular(10)),
+              ),
+              primary: Colors.green[800],
+              elevation: 10.0,
+              padding: const EdgeInsets.only(
+                right: 40.0,
+                // vertical: 40.0
+              ),
+            ), 
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children:[
+                CircleAvatar(
+                  backgroundColor:
+                      Colors.white, 
+                  radius: 50.0,
+                  child: Icon(
+                    Icons.text_fields_rounded,
+                    color: Colors.green[800],
+                    size: 40.0,
+                  ),
+                ),
+                const SizedBox(width: 30),
+                const Text('Traducir Texto\n Plano',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold), 
+                  textAlign: TextAlign.center,
+                ),
+              ] 
             ),
-            Text(
-              texto,
-              style: TextStyle(color: color, fontSize: 20),
-            ), //SE PONE EL TEXTO Y COLOR QUE ESTAMOS RECIBIENDO EN EL PARAMETRO
-            SizedBox(height: 5.0)
-          ],
-        ),
+          ),
 
-        //),
+
+          ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, 'traducir_documentos');
+            },
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(50), 
+                  bottomRight: Radius.circular(50), 
+                  topLeft: Radius.circular(50),
+                  bottomLeft: Radius.circular(10)),
+              ),
+              primary: Colors.green[600],
+              elevation: 10.0,
+              padding: const EdgeInsets.only(
+                left: 40.0,
+                // vertical: 40.0
+              ),
+            ), 
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children:[
+                const Text('Traducir Texto\n Documento',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold), 
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(width: 30),
+                CircleAvatar(
+                  backgroundColor:
+                      Colors.white, 
+                  radius: 50.0,
+                  child: Icon(
+                    Icons.document_scanner_rounded,
+                    color: Colors.green[800],
+                    size: 40.0,
+                  ),
+                ),
+              ] 
+            ),
+          ),
+
+          ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, 'traducir_imagenes');
+            },
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50), 
+                  bottomLeft: Radius.circular(50), 
+                  topRight: Radius.circular(50),
+                  bottomRight: Radius.circular(10)),
+              ),
+              primary: Colors.green[400],
+              elevation: 10.0,
+              padding: const EdgeInsets.only(
+                right: 40.0,
+                // vertical: 40.0
+              ),
+            ), 
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children:[
+                CircleAvatar(
+                  backgroundColor:
+                      Colors.white, 
+                  radius: 50.0,
+                  child: Icon(
+                    Icons.image_search_rounded,
+                    color: Colors.green[800],
+                    size: 40.0,
+                  ),
+                ),
+                const SizedBox(width: 30),
+                const Text('Traducir Texto\n Imagen',
+                  style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold), 
+                  textAlign: TextAlign.center,
+                ),
+              ] 
+            ),
+          ),
+        ]
       ),
     );
+
   }
 
-  // TODO: Revisar que el codigo creado de la custom navigation aplique correctamente en todas sus implementaciones para borrar este codigo comentado
-  // //BARRA INFERIOR DE NAVEGACION
-  // Widget _bottomNavigationBar(BuildContext context) {
-  //   int _botonBarraActual = 0;
-
-  //   List _listaPaginas = [
-  //     //Se usara para tomar la posicion del string y usarlo en el navigator
-  //     'menu',
-  //     'traducciones_guardadas',
-  //     'configuracion',
-  //   ];
-
-  //   return Theme(
-  //       //LA UNICA FORMA DE CAMBIAR LAS PROPIEDADES DEL BOTTOMNAVIGATIONBAR IMPLICA CAMBIAR EL THEME
-  //       data: Theme.of(context).copyWith(
-  //         canvasColor: Colors.white,
-  //         unselectedWidgetColor: Colors.grey,
-  //         //splashColor: Colors.red //Efecto color del tap
-  //       ),
-  //       child: BottomNavigationBar(
-  //         //PONER COLOR EN EL ITEM SELECCIONADO
-  //         fixedColor: Colors.green[800],
-  //         onTap: (index) {
-  //           //Al hacer tap obtendra el index de la barra y se ira a la pagina requerida
-  //           setState(() {
-  //             _botonBarraActual = index;
-  //             Navigator.pushNamed(context, _listaPaginas[_botonBarraActual]);
-  //           });
-  //         },
-  //         currentIndex: _botonBarraActual, //se toma el indice actual
-  //         items: const [
-  //           // Todos los items de la barra de navegacion
-  //           BottomNavigationBarItem(
-  //             icon: Icon(
-  //               Icons.home,
-  //               size: 30.0,
-  //             ),
-  //             label: 'Inicio',
-  //           ),
-  //           BottomNavigationBarItem(
-  //             icon: Icon(
-  //               Icons.list_alt,
-  //               size: 30.0,
-  //             ),
-  //             label: 'Trad. Guardadas',
-  //           ),
-  //           BottomNavigationBarItem(
-  //             icon: Icon(
-  //               Icons.supervised_user_circle,
-  //               size: 30.0,
-  //             ),
-  //             label: 'Configuracion',
-  //           )
-  //         ],
-  //       ));
-  // }
 }
