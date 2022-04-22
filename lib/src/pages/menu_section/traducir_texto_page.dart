@@ -60,6 +60,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
         enabled: false,
         style: const TextStyle(
             fontFamily: 'braile_font', fontSize: 20, height: 1.5),
+            // fontFamily: 'Braille6-ANSI', fontSize: 20, height: 1.5),
         decoration: InputDecoration(
           hintStyle: const TextStyle(color: Colors.black),
           hintText: _brailleText,

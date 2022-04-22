@@ -42,6 +42,7 @@ class _MenuPageState extends State<MenuPage> {
                 ),
               ),
                 // height: 100.0,
+              const SizedBox(height: 20,),
               _botonesMenu()
             ],
           ),
