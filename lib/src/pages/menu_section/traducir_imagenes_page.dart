@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tcs/theme/app_theme.dart';
+import 'package:tcs/utils/guardar_traduccion.dart';
 import 'package:tcs/utils/validators.dart';
 import 'package:tcs/widgets/widgets.dart';
 
@@ -15,18 +16,20 @@ class TraducirImagenesPage extends StatefulWidget {
 }
 
 class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
-  bool textScanning = false;
-  XFile? imageFile;
-  String _scannedText = "";
-  final guardarTextoController = TextEditingController();
-  final guardarTituloControllerPopUp = TextEditingController();
+  final guardarTituloController = TextEditingController();
+  final guardarDescripcionController = TextEditingController();
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  String _descriptionText = '';
+
+  String _textoDescripcion = "";
+  String _textoEscaneado = "";
+  XFile? archivoImagen;
+  bool escaneoTexto = false;
 
   @override
   void initState() {
     super.initState(); 
-    Future(_showDialog);
+    Future(_mostrarDialogo);
   }
   
   @override
@@ -42,14 +45,13 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (!textScanning && imageFile == null)
+                if (!escaneoTexto && archivoImagen == null)
                   Container(width: 300,height: 300,color: Colors.grey[300]!,),
-                if (imageFile != null) Image.file(File(imageFile!.path)),
+                if (archivoImagen != null) Image.file(File(archivoImagen!.path)),
                 const SizedBox(height: 20),
                 _botonesSeleccionarImg(),
                 const SizedBox(height: 20),
-                if (textScanning) CircularProgressIndicator(color: AppTheme.primary,),
-                // Text(scannedText, style: const TextStyle(fontSize: 20),),
+                if (escaneoTexto) CircularProgressIndicator(color: AppTheme.primary,),
                 _salidaTexto(false),
                 const Divider(),
                 _salidaTexto(true),
@@ -59,12 +61,11 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
           ),
         )
       ),
-
-      // bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
 
-  void _showDialog(){
+  // *                                        FUNCIONES DE INTERFAZ
+  void _mostrarDialogo(){
     showDialog(
       context: context, 
       builder: (BuildContext context) => 
@@ -89,7 +90,7 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
         CustomButton(
         buttontext: 'Galeria', 
         onPressedFunction: () {
-            _getImage(ImageSource.gallery);
+            _obtenerImagen(ImageSource.gallery);
           },
           padHButton: 20, 
           padVButton: 20,
@@ -102,7 +103,7 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
         CustomButton(
           buttontext: 'Cámara', 
           onPressedFunction: () {
-            _getImage(ImageSource.camera);
+            _obtenerImagen(ImageSource.camera);
           },
           padHButton: 20, 
           padVButton: 20,
@@ -143,7 +144,7 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
         const TextStyle(fontSize: 20, height: 1.5),
         decoration: InputDecoration(
           hintStyle: const TextStyle(color: Colors.black),
-          hintText: _scannedText,
+          hintText: _textoEscaneado,
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(),
           disabledBorder: const OutlineInputBorder(),
@@ -152,88 +153,100 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
       ),
     );
   }
+  // *                                        FUNCIONES DE INTERFAZ
 
-  void _getImage(ImageSource source) async {
+  // *                                        FUNCIONES DE SELECCION DE IMAGEN
+  void _obtenerImagen(ImageSource source) async {
     try {
-      final pickedImage = await ImagePicker().pickImage(source: source);
-      if (pickedImage != null) {
-        textScanning = true;
-        imageFile = pickedImage;
+      final imagenSeleccionada = await ImagePicker().pickImage(source: source);
+      if (imagenSeleccionada != null) {
+        escaneoTexto = true;
+        archivoImagen = imagenSeleccionada;
         setState(() {});
-        _getRecognisedText(pickedImage);
+        _obtenerTextoReconocido(imagenSeleccionada);
       }
     } catch (e) {
-      textScanning = false;
-      imageFile = null;
-      _scannedText = "Error occured while scanning";
+      escaneoTexto = false;
+      archivoImagen = null;
+      _textoEscaneado = "Ocurrió un error en el escaneo";
       setState(() {});
     }
   }
+  // *                                        FUNCIONES DE SELECCION DE IMAGEN
 
-  void _getRecognisedText(XFile image) async {
-    final inputImage = InputImage.fromFilePath(image.path);
-    final textDetector = GoogleMlKit.vision.textDetector();
-    RecognisedText recognisedText = await textDetector.processImage(inputImage);
-    await textDetector.close();
-    _scannedText = "";
-    for (TextBlock block in recognisedText.blocks) {
-      for (TextLine line in block.lines) {
-        _scannedText = _scannedText + line.text + "\n";
+  // *                                        FUNCIONES DE ESCANEO DE TEXTO
+  void _obtenerTextoReconocido(XFile imagen) async {
+    final imagenEntrada = InputImage.fromFilePath(imagen.path);
+    final detectorTexto = GoogleMlKit.vision.textDetector();
+    RecognisedText textoReconocido = await detectorTexto.processImage(imagenEntrada);
+    await detectorTexto.close();
+    _textoEscaneado = "";
+    for (TextBlock bloque in textoReconocido.blocks) {
+      for (TextLine linea in bloque.lines) {
+        _textoEscaneado = _textoEscaneado + linea.text + "\n";
       }
     }
-    textScanning = false;
+    escaneoTexto = false;
     setState(() {});
   }
+  // *                                        FUNCIONES DE ESCANEO DE TEXTO
 
+
+  // *                                        FUNCIONES DE FUNCIONALIDAD SOLUCION
   void _popUpGuardarTexto() {
     showDialog(
-        context: context,
-        builder: (BuildContext context) => CustomPopUp(
-            title: 'Guardar Traducción',
-            content: Form(
-              key: _key,
-              child: Column(
-                children: [
-                  TextFieldForm(
-                    labelText: 'Nombre Traduccion',
-                    hintText: 'Ingrese el nombre',
-                    icon: Icons.app_registration_rounded,
-                    obscureText: false,
-                    validator: validarVacio,
-                    hasNextFocus: true,
-                    controller: guardarTituloControllerPopUp,
-                  ),
-                  TextFormField(
-                    maxLines: 3,
-                    maxLength: 100,
-                    validator: validarVacio,
-                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                    autocorrect: true,
-                    // controller: controllerDescripcion,
-                    decoration: InputDecoration(
-                      hintText: 'Introduzca su descripcion\nMáximo 100 palabras',
-                      counterText:
-                          '${_descriptionText.length.toString()}/100 Carácteres',
-                      border: const OutlineInputBorder(),
-                      focusedBorder: const OutlineInputBorder(),
-                      disabledBorder: const OutlineInputBorder(),
-                      enabledBorder: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        _descriptionText = value;
-                      });
-                    },
-                  ),
-                ],
+      context: context,
+      builder: (BuildContext context) => CustomPopUp(
+        title: 'Guardar Traducción',
+        content: Form(
+          key: _key,
+          child: Column(
+            children: [
+              TextFieldForm(
+                labelText: 'Nombre Traduccion',
+                hintText: 'Ingrese el nombre',
+                icon: Icons.app_registration_rounded,
+                obscureText: false,
+                validator: validarVacio,
+                hasNextFocus: true,
+                controller: guardarTituloController,
               ),
-            ),
-            buttonText: 'Guardar',
-            onPressedFunction: () {
-              if (_key.currentState!.validate()){
-                Navigator.pushNamed(context, 'traducciones_guardadas');
-              }
-            }));
+              TextFormField(
+                maxLines: 3,
+                maxLength: 100,
+                validator: validarVacio,
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                autocorrect: true,
+                controller: guardarDescripcionController,
+                decoration: InputDecoration(
+                  hintText: 'Introduzca su descripcion\nMáximo 100 palabras',
+                  counterText:
+                      '${_textoDescripcion.length.toString()}/100 Carácteres',
+                  border: const OutlineInputBorder(),
+                  focusedBorder: const OutlineInputBorder(),
+                  disabledBorder: const OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _textoDescripcion = value;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+        buttonText: 'Guardar',
+        onPressedFunction: () {
+          if (_textoEscaneado.isNotEmpty) {
+            if (_key.currentState!.validate()){
+              escrituraFirestore(_textoEscaneado,guardarTituloController.text, guardarDescripcionController.text);
+              Navigator.pushNamed(context, 'traducciones_guardadas');
+            }
+          }
+        }
+      )
+    );
   }
-  
+  // *                                        FUNCIONES DE FUNCIONALIDAD SOLUCION
 }
