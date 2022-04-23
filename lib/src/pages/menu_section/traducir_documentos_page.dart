@@ -4,7 +4,7 @@ import 'package:tcs/theme/app_theme.dart';
 import 'package:tcs/utils/validators.dart';
 import 'package:tcs/widgets/widgets.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:pdf_text/pdf_text.dart';
 
 class TraducirDocumentosPage extends StatefulWidget {
   const TraducirDocumentosPage({Key? key}) : super(key: key);
@@ -14,6 +14,7 @@ class TraducirDocumentosPage extends StatefulWidget {
 }
 
 class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
+  PDFDoc? _pdfDoc;
   String _text = "";
   int _size = 0;
   String name = "";
@@ -69,41 +70,45 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
       // bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
+  
 
   Future _pickPDFText() async {
     try {
-      FilePickerResult? filePickerResult =
-          await FilePicker.platform.pickFiles();
+      var filePickerResult = await FilePicker.platform.pickFiles();
       if (filePickerResult != null) {
-        PdfDocument document = PdfDocument(
-            inputBytes:
-                await _readDocumentData(filePickerResult.files.single.path!));
-        PdfTextExtractor extractor = PdfTextExtractor(document);
-        _size = document.pages.count;
-        _text = extractor.extractText();
-        _showResult(_text);
+        _pdfDoc = await PDFDoc.fromPath(filePickerResult.files.single.path!);
         setState(() {});
-        _trimedText = _text.replaceAll("\n", " ");
-        // print(_trimedText);
       }
+      if (_pdfDoc == null) {
+        return;
+      }
+      _text = await _pdfDoc!.text;
+      _size = _pdfDoc!.length;
+      _trimedText = _text.replaceAll("\n", " ");
+      setState(() {});
+      _showResult(_text);
     } catch (e) {
-      name = "Error occured while scanning";
-      _text = name;
+      print(e);
+      _trimedText = "Error occured while scanning";
       setState(() {});
     }
   }
 
-  Future<List<int>> _readDocumentData(String name) async {
-    final ByteData data = await rootBundle.load(name);
-    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-  }
 
   void _showResult(String text) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Texto Extraido'),
+            title: Center(
+              child: Text('Texto Extraido',
+               textAlign: TextAlign.center, 
+                style: TextStyle(
+                  fontSize: 24,
+                  color: AppTheme.primary,
+                )
+              ),
+            ),
             content: Scrollbar(
               child: SingleChildScrollView(
                 child: Text(text),
@@ -112,11 +117,18 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
               ),
             ),
             actions: [
-              TextButton(
-                child: const Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              Center(
+                child: TextButton(
+                  child: Text('Ok',  
+                    style: TextStyle(
+                      color: AppTheme.primary,
+                      fontSize: 20,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               )
             ],
           );

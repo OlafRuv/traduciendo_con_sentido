@@ -46,6 +46,7 @@ dependencies:
   path_provider: ^2.0.9
   open_file: ^3.2.1 
   file_picker: ^4.5.1
+  pdf_text: ^0.5.0
 
 
 dev_dependencies:
@@ -94,6 +95,10 @@ flutter:
     - family: Braile_font
       fonts:
         - asset: assets/fonts/Braile_font.ttf
+          style: normal
+    - family: Braille6-ANSI
+      fonts:
+        - asset: assets/fonts/Braille6-ANSI.ttf
           style: normal
 
   # fonts:
