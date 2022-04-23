@@ -76,7 +76,7 @@ CollectionReference firebaseFirestore = FirebaseFirestore.instance.collection("u
                                 context: context, 
                                 builder: (BuildContext context) => 
                                 AlertDialog(
-                                title: const Text('Texto de traducción'),
+                                title: const Text('Traducción de texto'),
                                 content: SingleChildScrollView(
                                   child: Text(data['Texto_guardado'], style: const TextStyle(fontFamily: 'braile_font',fontSize: 20, height: 1.5)), //MOSTRARA EL TEXTO DE NUESTRO ELEMENTO SELECCIONADO DE FIRESTORE
                                 ),

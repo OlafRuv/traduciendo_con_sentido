@@ -15,6 +15,8 @@ class TraducirTextoPage extends StatefulWidget {
 class _TraducirTextoPageState extends State<TraducirTextoPage> {
   final guardarTextoController = TextEditingController();
   final guardarTituloControllerPopUp = TextEditingController();
+  final guardarDescripcionController = TextEditingController();
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   String _enteredText = '';
   String _brailleText = '';
@@ -60,6 +62,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
         enabled: false,
         style: const TextStyle(
             fontFamily: 'braile_font', fontSize: 20, height: 1.5),
+            // fontFamily: 'Braille6-ANSI', fontSize: 20, height: 1.5),
         decoration: InputDecoration(
           hintStyle: const TextStyle(color: Colors.black),
           hintText: _brailleText,
@@ -145,7 +148,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
 
   // TODO: Integrar la descripcion al registro de FIREBASE
   Future<void> escrituraFirestore(
-      String guardarTextoFirestore, String guardarTituloFirestore) async {
+      String guardarTextoFirestore, String guardarTituloFirestore, String guardarDescripcionFirestore) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     String identificadorCorreo = auth.currentUser!.email.toString();
     String identificadorUid = auth.currentUser!.uid.toString();
@@ -153,10 +156,13 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
         FirebaseFirestore.instance.collection('usuarios');
 
     coleccionUsuarios.add({
-      'Titulo': guardarTituloFirestore,
+      'Titulo': 
+          guardarTituloFirestore,
       'Texto_guardado':
           guardarTextoFirestore, //INGRESA EN EL CAMPO TEXTO GUARDADO NUESTRO TEXTO A GUARDAR
-      'Nombre_usuario':
+      'Descripción':  
+          guardarDescripcionFirestore,
+      'Nombre_usuario': 
           identificadorCorreo, //INGRESA EN EL CAMPO NOMBRE USUARIO NUESTRO USUARIO (CORREO)
       'Uid':
           identificadorUid, //INGRESA EN EL CAMPO UID NUESTRO IDENTIFICADOR DE USUARIO
@@ -188,11 +194,11 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
                     maxLength: 100,
                     maxLengthEnforcement: MaxLengthEnforcement.enforced,
                     autocorrect: true,
-                    // controller: controllerDescripcion,
+                    controller:guardarDescripcionController,
                     decoration: InputDecoration(
                       hintText: 'Introduzca su descripcion\nMáximo 100 palabras',
                       counterText:
-                          '${_descriptionText.length.toString()}/100 Carácteres',
+                          '${guardarDescripcionController.text.length.toString()}/100 Carácteres',
                       border: const OutlineInputBorder(),
                       focusedBorder: const OutlineInputBorder(),
                       disabledBorder: const OutlineInputBorder(),
@@ -200,7 +206,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        _descriptionText = value;
+                        //guardarDescripcionController.text = value;
                       });
                     },
                   ),
@@ -211,7 +217,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
             onPressedFunction: () {
               if (_key.currentState!.validate()){
                 escrituraFirestore(guardarTextoController.text,
-                  guardarTituloControllerPopUp.text);
+                  guardarTituloControllerPopUp.text, guardarDescripcionController.text);
                 Navigator.pushNamed(context, 'traducciones_guardadas');
               }
             }));
