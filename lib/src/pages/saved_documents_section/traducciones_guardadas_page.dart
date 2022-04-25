@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tcs/theme/app_theme.dart';
+import 'package:tcs/utils/crear_pdf.dart';
 import 'package:tcs/widgets/widgets.dart';
 
 class TraduccionesGuardadasPage extends StatefulWidget {
@@ -44,7 +45,11 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
           return const Text('Algo salio mal');
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(color: AppTheme.primary,);
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Center( 
+              child: CircularProgressIndicator(color: AppTheme.primary,)),
+          );
         }
         return ListView(
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
@@ -98,7 +103,9 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
                       const SizedBox(width: 8,),
                       TextButton(
                         child: const Text("Descargar"),
-                        onPressed: _descargar,
+                        onPressed: (){
+                          _descargar(titulo,contenido);
+                        },
                       ),
                       const SizedBox(width: 8,),
                       TextButton(
@@ -170,19 +177,24 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
     );
   }
 
-  void _descargar(){
+  void _descargar(String titulo, String contenido){
     showDialog(
       context: context, 
       builder: (BuildContext context) => 
       CustomPopUp(
         title: 'Seleccione una opción',
         buttonText: 'Cancelar',
-        onPressedFunction: (){Navigator.pop(context);},
+        onPressedFunction: (){
+          Navigator.pop(context);
+        },
         content: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: (){Navigator.pop(context);}, 
+              onPressed: (){
+                Navigator.pop(context);
+                crearPDF(titulo, contenido);
+              }, 
               child: const Text('Descargar PDF',
               style: TextStyle(
                 fontSize: AppTheme.size18,
@@ -191,7 +203,10 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
               ),
             const Divider(),
             TextButton(
-              onPressed: (){}, 
+              onPressed: (){
+                Navigator.pop(context);
+                crearPDF2(titulo, contenido);
+              },  
               child: const Text('Descargar PDF espejo',
               style: TextStyle(
                 fontSize: AppTheme.size18,
@@ -213,4 +228,5 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
       ),
     );
   }
+
 }
