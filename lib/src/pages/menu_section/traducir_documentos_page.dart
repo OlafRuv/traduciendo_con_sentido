@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tcs/theme/app_theme.dart';
+import 'package:tcs/utils/crear_brf.dart';
+import 'package:tcs/utils/crear_pdf.dart';
 import 'package:tcs/utils/guardar_traduccion.dart';
 import 'package:tcs/utils/validators.dart';
 import 'package:tcs/widgets/widgets.dart';
@@ -234,18 +236,24 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
   // *                                        FUNCIONES DE INTERFAZ
 
   // *                                        FUNCIONES DE FUNCIONALIDAD SOLUCION
-  void _descargar(){
-    showDialog(context: context, 
-    builder: (BuildContext context) => 
+  void _descargar(String titulo, String contenido){
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => 
       CustomPopUp(
         title: 'Seleccione una opción',
         buttonText: 'Cancelar',
-        onPressedFunction: (){Navigator.pop(context);},
+        onPressedFunction: (){
+          Navigator.pop(context);
+        },
         content: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: (){Navigator.pop(context);}, 
+              onPressed: (){
+                Navigator.pop(context);
+                crearPDF(titulo, contenido);
+              }, 
               child: const Text('Descargar PDF',
               style: TextStyle(
                 fontSize: AppTheme.size18,
@@ -254,7 +262,10 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
               ),
             const Divider(),
             TextButton(
-              onPressed: (){}, 
+              onPressed: (){
+                Navigator.pop(context);
+                crearPDF2(titulo, contenido);
+              },  
               child: const Text('Descargar PDF espejo',
               style: TextStyle(
                 fontSize: AppTheme.size18,
@@ -263,7 +274,10 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
             ),
             const Divider(), 
             TextButton(
-              onPressed: (){}, 
+              onPressed: (){
+                Navigator.pop(context);
+                crearMostrarBrf(contenido,titulo);
+              }, 
               child: const Text('Descargar .brf',
               style:  TextStyle(
                 fontSize: AppTheme.size18,
@@ -329,7 +343,7 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
               escrituraFirestore(_texto,guardarTituloController.text, guardarDescripcionController.text);
               Navigator.pop(context); 
               Navigator.pushNamed(context, 'traducciones_guardadas');
-              _descargar();
+              _descargar(guardarTituloController.text,_texto);
             }
           }
         }

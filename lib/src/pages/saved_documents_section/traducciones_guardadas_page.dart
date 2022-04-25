@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tcs/theme/app_theme.dart';
+import 'package:tcs/utils/crear_brf.dart';
 import 'package:tcs/utils/crear_pdf.dart';
 import 'package:tcs/widgets/widgets.dart';
 
@@ -42,7 +43,7 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
       stream: _usersStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text('Algo salio mal');
+          return const Text('Algo malio sal');
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Padding(
@@ -73,55 +74,42 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
           Radius.circular(10.0)
         )
       ),
-      child:Container(
-        height: 100,
-        color: Colors.white,
-        child: Expanded(
-          child:Container(
-            alignment: Alignment.topLeft,
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: ListTile(
-                    title: Text(titulo),
-                    subtitle: Text(descripcion),
-                  ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        child: const Text("Ver"),
-                        onPressed: ()
-                        {
-                          _showResult(contenido);
-                        },
-                      ),
-                      const SizedBox(width: 8,),
-                      TextButton(
-                        child: const Text("Descargar"),
-                        onPressed: (){
-                          _descargar(titulo,contenido);
-                        },
-                      ),
-                      const SizedBox(width: 8,),
-                      TextButton(
-                        child: const Text("Eliminar"),
-                        onPressed: (){
-                          _popUpEliminarRegistro(document);
-                        },
-                      ),
-                      const SizedBox(width: 8,),
-                    ],
-                  ),
-                )
-              ],
+      child: Container(
+        alignment: Alignment.topLeft,
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(titulo),
+              subtitle: Text(descripcion),
             ),
-          ),
-          // flex:8 ,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  child: const Text("Ver"),
+                  onPressed: ()
+                  {
+                    _showResult(contenido);
+                  },
+                ),
+                const SizedBox(width: 8,),
+                TextButton(
+                  child: const Text("Descargar"),
+                  onPressed: (){
+                    _descargar(titulo,contenido);
+                  },
+                ),
+                const SizedBox(width: 8,),
+                TextButton(
+                  child: const Text("Eliminar"),
+                  onPressed: (){
+                    _popUpEliminarRegistro(document);
+                  },
+                ),
+                const SizedBox(width: 8,),
+              ],
+            )
+          ],
         ),
       ),
       elevation: 8,
@@ -215,7 +203,10 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
             ),
             const Divider(), 
             TextButton(
-              onPressed: (){}, 
+              onPressed: (){
+                Navigator.pop(context);
+                crearMostrarBrf(contenido,titulo);
+              }, 
               child: const Text('Descargar .brf',
               style:  TextStyle(
                 fontSize: AppTheme.size18,
