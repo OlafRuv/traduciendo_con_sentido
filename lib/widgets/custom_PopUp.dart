@@ -21,43 +21,49 @@ class CustomPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog( //  Se construye el popup y se regresa como un alert dialog
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(32.0))),
-    title:Center(
-        child: Text(
-          title,
-          textAlign: TextAlign.center, 
-          style: TextStyle(
-            fontSize: 24,
-            color: AppTheme.primary,
-          ) 
-        )
-      ),
-    // title: Text(title),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: content,
-        )
-      ],
-    ),
-    actions: [
-      Center(
-        child: TextButton(
-          // Cuando se presiona se ejecuta la funcion que nos manda el usuario como parametro
-          onPressed: onPressedFunction,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      title:Center(
           child: Text(
-            buttonText,
+            title,
+            textAlign: TextAlign.center, 
             style: TextStyle(
+              fontSize: 24,
               color: AppTheme.primary,
-              fontSize: 20,
-              ),
+            ) 
+          )
+        ),
+      content: Scrollbar(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: content,
+              )
+            ],
           ),
         ),
       ),
-    ],
-  );
+      actions: [
+        Center(
+          child: TextButton(
+            // Cuando se presiona se ejecuta la funcion que nos manda el usuario como parametro
+            onPressed: onPressedFunction,
+            child: Text(
+              buttonText,
+              style: TextStyle(
+                color: AppTheme.primary,
+                fontSize: 20,
+                ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
