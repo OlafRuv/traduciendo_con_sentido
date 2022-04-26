@@ -4,7 +4,9 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
-import 'dart:math' as math; 
+import 'dart:math' as math;
+
+import 'package:tcs/models/braille_rules.dart'; 
 
 Future<void> guardarMostrarPdf(List<int> bytes, String nombrePdf) async{
   final path = (await getExternalStorageDirectory())?.path;
@@ -15,9 +17,10 @@ Future<void> guardarMostrarPdf(List<int> bytes, String nombrePdf) async{
 }
 
 Future<void> crearPDF(String tituloPDF, String textoPdf) async {
-  final  font = await rootBundle.load("assets/fonts/BRAILLE1.ttf");
+  final  font = await rootBundle.load("assets/fonts/Braille6-ANSI.ttf");
   final  ttf = pw.Font.ttf(font);
   final pdf = pw.Document();
+  textoPdf = aplicarReglas(textoPdf);
   
   pdf.addPage(
     pw.Page(
@@ -34,10 +37,10 @@ Future<void> crearPDF(String tituloPDF, String textoPdf) async {
 }
 
 Future<void> crearPDF2(String tituloPDF, String textoPdf) async {
-  final  font = await rootBundle.load("assets/fonts/BRAILLE1.ttf");
+  final  font = await rootBundle.load("assets/fonts/Braille6-ANSI.ttf");
   final  ttf = pw.Font.ttf(font);
   final pdf = pw.Document();
-  
+  textoPdf = aplicarReglas(textoPdf);
   pdf.addPage(
     pw.Page(
       build: (pw.Context context) => 

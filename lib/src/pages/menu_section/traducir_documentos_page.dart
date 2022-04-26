@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tcs/models/braille_rules.dart';
 import 'package:tcs/theme/app_theme.dart';
 import 'package:tcs/utils/crear_brf.dart';
 import 'package:tcs/utils/crear_pdf.dart';
@@ -91,9 +92,11 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
       _texto = await _pdfDoc!.text;
       _tamanio = _pdfDoc!.length;
       _textoCortado = _texto.replaceAll("\n", " ");
+      _textoCortado = aplicarReglas(_textoCortado);
       setState(() {});
       _showResult(_texto);
     } catch (e) {
+      _textoCortado = aplicarReglas(_textoCortado);
       _textoCortado = "Ocurrió un Error al Escanear";
       setState(() {});
     }
@@ -220,7 +223,7 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
         style: 
           braile
           ? const TextStyle(
-            fontFamily: 'braile_font', fontSize: 20, height: 1.5)
+            fontFamily: 'Braille6-ANSI', fontSize: 20, height: 1.5)
           : const TextStyle(fontSize: 20, height: 1.5),
         decoration: InputDecoration(
           hintStyle: const TextStyle(color: Colors.black),

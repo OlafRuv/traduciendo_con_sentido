@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tcs/models/braille_rules.dart';
 import 'package:tcs/theme/app_theme.dart';
 import 'package:tcs/utils/guardar_traduccion.dart';
 import 'package:tcs/utils/validators.dart';
@@ -140,11 +141,14 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
         autocorrect: true,
         enabled: false,
         style: braile ? 
-        const TextStyle(fontFamily: 'braile_font', fontSize: 20, height: 1.5) : 
+        const TextStyle(fontFamily: 'Braille6-ANSI', fontSize: 20, height: 1.5): 
         const TextStyle(fontSize: 20, height: 1.5),
         decoration: InputDecoration(
           hintStyle: const TextStyle(color: Colors.black),
-          hintText: _textoEscaneado,
+          hintText: 
+          braile ?
+          aplicarReglas(_textoEscaneado):
+          _textoEscaneado,
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(),
           disabledBorder: const OutlineInputBorder(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tcs/models/braille_rules.dart';
 import 'package:tcs/utils/guardar_traduccion.dart';
 import 'package:tcs/utils/validators.dart';
 import 'package:tcs/widgets/widgets.dart';
@@ -59,8 +60,8 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
         autocorrect: true,
         enabled: false,
         style: const TextStyle(
-            fontFamily: 'braile_font', fontSize: 20, height: 1.5),
-            // fontFamily: 'Braille6-ANSI', fontSize: 20, height: 1.5),
+            // fontFamily: 'braile_font', fontSize: 20, height: 1.5),
+            fontFamily: 'Braille6-ANSI', fontSize: 20, height: 1.5),
         decoration: InputDecoration(
           hintStyle: const TextStyle(color: Colors.black),
           hintText: _brailleText,
@@ -125,7 +126,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
         CustomButton(
           buttontext: 'Traducir',
           onPressedFunction: () {
-            _brailleText = _enteredText;
+            _brailleText = aplicarReglas(_enteredText);
             setState(() {});
           },
           padHButton: 20,
