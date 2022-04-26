@@ -26,6 +26,7 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
   String _textoEscaneado = "";
   XFile? archivoImagen;
   bool escaneoTexto = false;
+  bool _activo = false;
 
   @override
   void initState() {
@@ -48,14 +49,14 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
               children: [
                 if (!escaneoTexto && archivoImagen == null)
                   Container(width: 300,height: 300,color: Colors.grey[300]!,),
-                if (archivoImagen != null) Image.file(File(archivoImagen!.path)),
+                if (archivoImagen != null)  Semantics(child: Image.file(File(archivoImagen!.path)),label: "Imagen a traducir",),
                 const SizedBox(height: 20),
                 _botonesSeleccionarImg(),
                 const SizedBox(height: 20),
                 if (escaneoTexto) CircularProgressIndicator(color: AppTheme.primary,),
-                _salidaTexto(false),
+                Semantics(child: _salidaTexto(false),label: "Texto recuperado de imagen",),
                 const Divider(),
-                _salidaTexto(true),
+                Semantics(child: _salidaTexto(true),label: "Sección de texto en Braille",),
                 _guardarTraduccion(),
               ],
             )
@@ -72,7 +73,7 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
       builder: (BuildContext context) => 
       CustomPopUp(
         title: 'Traduccion de Imagenes', 
-        content: const Text('Haga click en el boton de seleccionar para poder traducir su foto o imagen al cuadro de texto o mandar a imprimir',
+        content: const Text('Haga click en el botón de galería para seleccionar una imagen de su dispositivo.\nHaga click en el botón de cámara para abrirla y tomar foto de su texto a traducir.\nPodrá ver una sección de su texto extraído en la parte de abajo, así como del texto ya traducido.\nHaga click en el botón de guardar, para guardar el texto en sus registros.',
           textAlign: TextAlign.justify,
           style: TextStyle(fontSize: 20)
         ), 
@@ -89,7 +90,7 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [ 
         CustomButton(
-        buttontext: 'Galeria', 
+        buttontext: 'Galería', 
         onPressedFunction: () {
             _obtenerImagen(ImageSource.gallery);
           },
@@ -122,7 +123,9 @@ class _TraducirImagenesPageState extends State<TraducirImagenesPage> {
         CustomButton(
           buttontext: 'Guardar', 
           onPressedFunction: () {
-            _popUpGuardarTexto();
+            if(_textoEscaneado.isNotEmpty) {
+              _popUpGuardarTexto();
+            }
           },
           padHButton: 20, 
           padVButton: 20,

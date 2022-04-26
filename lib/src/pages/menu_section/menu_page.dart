@@ -21,23 +21,26 @@ class _MenuPageState extends State<MenuPage> {
             children: [
               // const SizedBox(height: 50,),
               // _tituloDescripcion(), 
-              Container(
-                child: const Image(image: AssetImage('assets/TraduciendoConSentidoSml.png'),height:220.0),
-                  padding: const EdgeInsets.only(top: 0,bottom:0),
-                  width:MediaQuery.of(context).size.width * 1,
-                decoration: BoxDecoration(
-                  // color: Colors.green[400],
-                  gradient: LinearGradient(
-                    colors: [
-                      // AppTheme.grad1,
-                      // AppTheme.grad2,
-                      Colors.green[400]!,
-                      Colors.green[800]!,
-                    ]
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(80), 
-                    bottomRight: Radius.circular(80)
+              Semantics(
+                label: "Traduciendo con Sentido logo",
+                child: Container(
+                  child: const Image(image: AssetImage('assets/TraduciendoConSentidoSml.png'),height:220.0),
+                    padding: const EdgeInsets.only(top: 0,bottom:0),
+                    width:MediaQuery.of(context).size.width * 1,
+                  decoration: BoxDecoration(
+                    // color: Colors.green[400],
+                    gradient: LinearGradient(
+                      colors: [
+                        // AppTheme.grad1,
+                        // AppTheme.grad2,
+                        Colors.green[400]!,
+                        Colors.green[800]!,
+                      ]
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(80), 
+                      bottomRight: Radius.circular(80)
+                    ),
                   ),
                 ),
               ),

@@ -27,7 +27,7 @@ class _TraduccionesGuardadasPageState extends State<TraduccionesGuardadasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TRADUCIONES GUARDADAS'),
+        title: const Text("TRADUCIONES GUARDADAS"),
       ),
       body: Stack(
         children: [

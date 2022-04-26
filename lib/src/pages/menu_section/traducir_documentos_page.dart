@@ -67,7 +67,10 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
                   ),
                   padding: const EdgeInsets.only(top: 10.0)
                 ),
-                _salidaTexto(true),
+                Semantics(
+                  child: _salidaTexto(true),
+                  label: "Vista de texto traducido en braille",
+                ),
                 _botones(),
               ],
             ),
@@ -108,7 +111,7 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(
-            child: Text('Texto Extraido',
+            child: Text('Texto Extraído',
               textAlign: TextAlign.center, 
               style: TextStyle(
                 fontSize: 24,
@@ -152,7 +155,7 @@ class _TraducirDocumentosPageState extends State<TraducirDocumentosPage> {
       builder: (BuildContext context) => CustomPopUp(
         title: 'Traduccion de Documentos',
         content: const Text(
-          'Haga click en el boton de seleccionar para poder traducir su documento al cuadro de texto o mandar a imprimir',
+          'Haga click en el botón de seleccionar archivo para seleccionar un PDF de su dispositivo.\nSe abrirá un cuadro de alerta con el texto extraído.\nUna vez cerrado el cuadro de alerta observará una sección de su texto ya traducido.\nHaga click en el botón de guardar, para guardar el texto en sus registros o haga click en el botón de imprimir para seleccinar la opción de descarga que más le convenga. \n(Esta opción también creará el registro)',
           textAlign: TextAlign.justify,
           style: TextStyle(fontSize: 20),
         ),

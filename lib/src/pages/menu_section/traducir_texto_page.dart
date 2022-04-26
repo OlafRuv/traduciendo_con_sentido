@@ -41,7 +41,11 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
               children: [
                 _entradaTexto(),
                 const Divider(),
-                _salidaBraile(),
+
+                Semantics(
+                  child: _salidaBraile(),
+                  label: "Vista de texto traducido en braille",
+                ),
                 _botones(),
               ],
             ),
@@ -107,7 +111,7 @@ class _TraducirTextoPageState extends State<TraducirTextoPage> {
       builder: (BuildContext context) => CustomPopUp(
         title: 'Traduccion de Texto Plano',
         content: const Text(
-          'Haga click en el cuadro de texto para teclear su texto deseado y usar los botones para traducir o guardar traduccion',
+          'Haga click en el cuadro para ingresar su texto a traducir, use los botones para traducir o guardar la traducción.\nEn el segundo cuadro se mostrará la traducción efectuada.',
           textAlign: TextAlign.justify,
           style: TextStyle(fontSize: 20)
         ),

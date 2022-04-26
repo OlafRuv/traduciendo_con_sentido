@@ -23,11 +23,18 @@ class ScrollPage extends StatelessWidget {
   Widget _pagina1(BuildContext context){
     return Stack( // Un stack que almacena nuestro custom background que usa un logo como titulo y que al mismo tiempo recibe el texto que despiega la pagina
       children: [
-        const CustomBackground(
-          title: Image(image: AssetImage('assets/TraduciendoConSentido.png'),height:280.0)),
+        CustomBackground(
+          title: Semantics(
+            label: "Traduciendo Con Sentido logo" ,
+            child: const Image(
+              image: AssetImage('assets/TraduciendoConSentido.png'),
+              height:280.0
+            )
+          )
+        ),
         _contenidoPagina1v2(
           context: context, 
-          texto: 'La misión y visión de TCS es permitir al público general y a personas con alguna discapacidad visual traducir lenguaje convencional a lenguaje braille, aplicandolo de una manera simple y accesible. Ademas, se pretende facilitar que las personas con discapacidades visuales puedan tener acceso a información escrita, tal y como lo gozan las personas sin estas condiciones.',
+          texto: 'La misión y visión de TCS es permitir al público general y a personas con alguna discapacidad visual traducir lenguaje convencional a lenguaje braille de una manera simple y accesible. Además, buscamos facilitar e incrementar el acceso a información escrita para las personas con discapacidades visuales, tal y como lo gozan las personas sin estas condiciones.',
           ),
       ],
     );
@@ -43,11 +50,11 @@ class ScrollPage extends StatelessWidget {
         ),
         _contenidoPagina1v2(
           context: context, 
-          texto: 'En esta aplicación podras traducir texto convencional a braille, procesar texto de documentos para su traducción al braille y procesar texto de imágenes para su traducción al braille. Al registrarse tambien podra hacer uso del acceso de sus documentos en linea',
-          extra: const Image(
-            height: 100,
-            image: AssetImage('assets/braille.png')
-          )
+          texto: 'En esta aplicación podrás traducir Texto Convencional a Braille, así como procesar texto de Documentos PDF y texto de Imágenes para su traducción al Braille.\nAl registrarte podrás hacer uso de estas herramientas, así como del almacenamiento de tus traducciones en la nube, para su acceso y descarga al momento que lo necesites.',
+          // extra: const Image(
+          //   height: 100,
+          //   image: AssetImage('assets/braille.png')
+          // )
         ),
       ],
     );
