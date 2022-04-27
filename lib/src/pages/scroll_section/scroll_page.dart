@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/widgets/custom_background.dart';
-import 'package:tcs/widgets/widgets.dart';
 
-// Widget de sliders previos al ingreso a la aplicacion 
+import 'package:TCS/widgets/custom_background.dart';
+import 'package:TCS/widgets/widgets.dart';
+
+// * Widget de sliders previos al ingreso a la aplicacion 
 class ScrollPage extends StatelessWidget {
   const ScrollPage({Key? key}) : super(key: key);
 

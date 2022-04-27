@@ -1,18 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
 
-import 'package:tcs/utils/validators.dart';
-import 'package:tcs/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// TODO: Separar funcionamiento de llamadas a la base de datos en un nivel más de abstracción
+import 'package:TCS/theme/app_theme.dart';
+import 'package:TCS/utils/validators.dart';
+import 'package:TCS/widgets/widgets.dart';
+
 class CrearSesionPasswordPage extends StatefulWidget {
-  //const CrearSesionPasswordPage({Key? key}) : super(key: key);
-  final String correo; //Editado
+  final String correo;
   const CrearSesionPasswordPage(
     this.correo, 
     {Key? key
-  }) : super(key: key); //Editado
+  }) : super(key: key); 
 
   @override
   State<CrearSesionPasswordPage> createState() => _CrearSesionPasswordPageState();
@@ -20,8 +19,10 @@ class CrearSesionPasswordPage extends StatefulWidget {
 
 class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
   // Creamos el controlador de la contraseña
-  final contraseniaController = TextEditingController(); //Editado
-  final GlobalKey<FormState> _key = GlobalKey<FormState>(); //Editado
+  final contraseniaController = TextEditingController();
+
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  
   String errorMensajeFirebase = '';
 
   @override

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // * Esta es una pagina de error que se desplegara cuando la ruta buscada no se encuentre
-// Toda la implementacion solo despliega una alerta
+// ! Toda la implementacion solo despliega una alerta
 
 class AlertScreen extends StatelessWidget {
   

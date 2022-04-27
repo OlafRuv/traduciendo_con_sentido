@@ -1,28 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:tcs/theme/app_theme.dart';
-import 'package:tcs/utils/validators.dart';
-import 'package:tcs/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// TODO: Separar funcionamiento de llamadas a la base de datos en un nivel más de abstracción
+import 'package:TCS/theme/app_theme.dart';
+import 'package:TCS/utils/validators.dart';
+import 'package:TCS/widgets/widgets.dart';
 
 class InicioSesionPage extends StatefulWidget {
   const InicioSesionPage({Key? key}) : super(key: key);
-
   @override
   State<InicioSesionPage> createState() => _InicioSesionPageState();
 }
 
 class _InicioSesionPageState extends State<InicioSesionPage> {
-
   // Creamos los controladores del correo y la contraseña
-  final correoController = TextEditingController(); //Editado
-  final contraseniaController = TextEditingController(); //Editado
+  final correoController = TextEditingController(); 
+  final contraseniaController = TextEditingController(); 
 
-  final GlobalKey<FormState> _key = GlobalKey<FormState>(); //Editado
+  final GlobalKey<FormState> _key = GlobalKey<FormState>(); 
+
   String errorMensajeFirebase = '';
-
   bool banderaCorreoValidado = false;
   
   @override

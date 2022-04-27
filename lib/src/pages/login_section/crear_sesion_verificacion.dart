@@ -1,9 +1,7 @@
-import 'package:tcs/src/pages/login_section/crear_sesion_password_page.dart';
 import 'package:flutter/material.dart';
-import 'package:tcs/widgets/widgets.dart';
 
-
-// TODO: Revisar si esta pagina se utiliza, si si la implementaremos o que hacer con ella
+import 'package:TCS/src/pages/login_section/crear_sesion_password_page.dart';
+import 'package:TCS/widgets/widgets.dart';
 
 class CrearSesionVerificacionPage extends StatelessWidget {
   const CrearSesionVerificacionPage({Key? key}) : super(key: key);

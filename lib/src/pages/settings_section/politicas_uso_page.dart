@@ -1,6 +1,6 @@
 //import 'package:diseno_inicial/src/pages/home/widgets/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:tcs/widgets/widgets.dart';
+import 'package:TCS/widgets/widgets.dart';
 
 // * Screen de Politicas de Uso
 class PoliticasDeUsoPage extends StatefulWidget {

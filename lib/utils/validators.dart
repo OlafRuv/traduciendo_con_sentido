@@ -1,3 +1,7 @@
+// *
+// *        FUNCIONES VALIDADORAS DE CAMPOS FLUTTER EN LENGUAJE DART
+// *
+
 String? validarEmail(String? formularioEmail){ //Editado
   if(formularioEmail ==null || formularioEmail.isEmpty){
     return 'Correo electronico requerido';

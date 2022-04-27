@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
+import 'package:TCS/theme/app_theme.dart';
 
 //Este es nuestro widget de los botones de navegacion al pie de página personalizados
 class CustomBottomNavigation extends StatefulWidget {
@@ -26,7 +26,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
       currentIndex: widget.botonBarraActual,
       onTap: (index){
         setState(() {
-          // TODO: Hacer que la ruta no sea de esta manera, buscar solución
           Navigator.pushNamed(context, listaPaginas[index]);
         });
       },

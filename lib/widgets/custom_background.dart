@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
+import 'package:TCS/theme/app_theme.dart';
 
 // Creamos el widget de custom background que se utilizara en la mayoria de screens del scroll y primera pantalla de botones de la app
 class CustomBackground extends StatelessWidget {

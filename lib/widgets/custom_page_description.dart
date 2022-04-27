@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
+import 'package:TCS/theme/app_theme.dart';
 
 //Este es un breve widget que sirve para estandarizar las descripciones de todas las paginas dentro del funcionamiento principal de la aplicacion 
 class CustomPageDescription extends StatelessWidget {

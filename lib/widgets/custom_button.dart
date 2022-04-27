@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
+import 'package:TCS/theme/app_theme.dart';
 
 
 // Este es el widget de nuestro boton personalizado, este widget es nuestra platilla para algunos de los botones de la aplicacion

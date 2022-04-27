@@ -1,6 +1,6 @@
-import 'package:tcs/models/models.dart';
-import 'package:tcs/src/pages/alert_screen.dart';
-import 'package:tcs/src/pages/pages.dart';
+import 'package:TCS/models/models.dart';
+import 'package:TCS/src/pages/alert_screen.dart';
+import 'package:TCS/src/pages/pages.dart';
 import 'package:flutter/material.dart';
 
 // * Clase manejadora de rutas en el proyecto

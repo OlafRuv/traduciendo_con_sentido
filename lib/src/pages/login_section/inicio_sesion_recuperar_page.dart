@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/utils/validators.dart';
 
-import 'package:tcs/widgets/widgets.dart';
+import 'package:TCS/utils/validators.dart';
+import 'package:TCS/widgets/widgets.dart';
 
-// TODO: Buscar implementar lo del envio de correo o al menos una verificación del correo ingresado
 class InicioSesionRecuperarPage extends StatelessWidget {
   const InicioSesionRecuperarPage({
     Key? key

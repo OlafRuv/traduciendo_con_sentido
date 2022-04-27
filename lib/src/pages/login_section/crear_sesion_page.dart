@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:tcs/src/pages/login_section/crear_sesion_password_page.dart';
-import 'package:tcs/utils/validators.dart';
-import 'package:tcs/widgets/widgets.dart';
+import 'package:TCS/src/pages/login_section/crear_sesion_password_page.dart';
+import 'package:TCS/utils/validators.dart';
+import 'package:TCS/widgets/widgets.dart';
 
+// * Pagina de crear Sesión
 class CrearSesionPage extends StatefulWidget {
   const CrearSesionPage({Key? key}) : super(key: key);
 
@@ -12,10 +13,9 @@ class CrearSesionPage extends StatefulWidget {
 }
 
 class _CrearSesionPageState extends State<CrearSesionPage> {
+  // Controlador de campo de correo
   final correoController = TextEditingController(); 
-  // nos ayuda a tener un control en el valor del textfield y le notifica al oyente para que interprete el texto
   String correo = ''; 
-  // se usuara para pasar el valor del correo a la otra pagina de password
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>(); //Editado
 

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// * Funcion asincrona para la escritura en firestore de una traduccion
 Future<void> escrituraFirestore(String guardarTextoFirestore, String guardarTituloFirestore, String guardarDescripcionFirestore) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   String identificadorCorreo = auth.currentUser!.email.toString();

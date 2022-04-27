@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
+import 'package:TCS/theme/app_theme.dart';
 
 // Creamos el widget decustom half backgorund que se usa en la mayoria de formularios para el inicio de sesion, recuperacion de credenciales y creacion de una nueva cuenta
 class CustomHalfBackground extends StatelessWidget {

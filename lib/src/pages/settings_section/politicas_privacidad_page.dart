@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/widgets/widgets.dart';
 
-// Este es un widget sencillo que solo despliega las politicas de privacidad
+import 'package:TCS/widgets/widgets.dart';
+
+// * Este es un widget sencillo que solo despliega las politicas de privacidad
 class PoliticasDePrivacidadPage extends StatefulWidget {
   const PoliticasDePrivacidadPage({Key? key}) : super(key: key);
-
   @override
   _PoliticasDePrivacidadPageState createState() =>
       _PoliticasDePrivacidadPageState();

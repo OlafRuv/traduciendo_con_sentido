@@ -1,13 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
 
-import 'package:tcs/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// Seccion de configuracion del usuario, Por el momento solo cuanta con la infomarcion del usuario mas basica, como su correo, y con los botones de politicas de uso y privacidad, ademas del boton de cerrar sesion
+import 'package:TCS/theme/app_theme.dart';
+import 'package:TCS/widgets/widgets.dart';
+
+// * Seccion de configuracion del usuario, \
+// Por el momento solo cuanta con la infomarcion del usuario mas basica, como su correo, y con los botones de politicas de uso y privacidad, ademas del boton de cerrar sesion
 class ConfiguracionPage extends StatefulWidget {
   const ConfiguracionPage({Key? key}) : super(key: key);
-
   @override
   _ConfiguracionPageState createState() => _ConfiguracionPageState();
 }
@@ -28,7 +29,6 @@ class _ConfiguracionPageState extends State<ConfiguracionPage> {
           const Text('Usuario:',
             style: TextStyle(fontSize: AppTheme.size20),
           ),
-          // TODO: Debemos de sacar la llamada a la base de datos de aquí
           Text((usuario == null ? 'Usuario no registrado' : FirebaseAuth.instance.currentUser!.email.toString()), 
           style: const TextStyle(fontSize: AppTheme.size20),
           ), //si el usuario se encuentra en sesion mostrara el correo del usuario y si esta en null mostrara que el usuario no esta registrado

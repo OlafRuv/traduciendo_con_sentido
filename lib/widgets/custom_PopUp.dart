@@ -1,6 +1,7 @@
-// ignore: file_names
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:tcs/theme/app_theme.dart';
+import 'package:TCS/theme/app_theme.dart';
 
 // Este es un widget sencillo que nos ayuda a estandarizar los popups con los que se cuenta en la aplicacion
 class CustomPopUp extends StatelessWidget {

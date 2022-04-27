@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:tcs/widgets/widgets.dart';
+import 'package:TCS/widgets/widgets.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
-
   @override
   _MenuPageState createState() => _MenuPageState();
 }
 
+// * Pagina de menu principal
 class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        //SIMILAR A LISTVIEW, LA DIFERENCIA ES QUE ABARCA TODA LA PANTALLA
+        // Widget para que la pantalla sea scrolleable
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // const SizedBox(height: 50,),
-              // _tituloDescripcion(), 
-              Semantics(
+              Semantics( 
+                // Semantics es un widget que nos ayuda a que el widget hijo se puede leer por el lector de pantalla
                 label: "Traduciendo con Sentido logo",
+                // Este es el texto que se leera
                 child: Container(
-                  child: const Image(image: AssetImage('assets/TraduciendoConSentidoSml.png'),height:220.0),
+                  // Imagen de encabezado
+                  child: const Image(
+                    image: AssetImage('assets/TraduciendoConSentidoSml.png'),
+                    height:220.0
+                  ),
                     padding: const EdgeInsets.only(top: 0,bottom:0),
                     width:MediaQuery.of(context).size.width * 1,
                   decoration: BoxDecoration(
-                    // color: Colors.green[400],
                     gradient: LinearGradient(
                       colors: [
-                        // AppTheme.grad1,
-                        // AppTheme.grad2,
                         Colors.green[400]!,
                         Colors.green[800]!,
                       ]
@@ -46,11 +47,13 @@ class _MenuPageState extends State<MenuPage> {
               ),
                 // height: 100.0,
               const SizedBox(height: 20,),
+              // Botones del menu
               _botonesMenu()
             ],
           ),
         ),
       ),
+      // Barra de navegacion de la parte de abajo
       bottomNavigationBar: const CustomBottomNavigation(botonBarraActual: 0),
     );
   }
@@ -61,10 +64,13 @@ class _MenuPageState extends State<MenuPage> {
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
+          // ****************************** Boton #1 ******************************
           ElevatedButton(
+            // Funcion al presionarlo
             onPressed: (){
               Navigator.pushNamed(context, 'traducir_texto');
             },
+            // Puro estilo
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -80,8 +86,8 @@ class _MenuPageState extends State<MenuPage> {
                 // vertical: 40.0
               ),
             ), 
+            // Estilo del icono y texto de adentro
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children:[
                 CircleAvatar(
                   backgroundColor:
@@ -101,8 +107,10 @@ class _MenuPageState extends State<MenuPage> {
               ] 
             ),
           ),
-
-
+          // ****************************** Boton #1 ******************************
+          
+          // ****************************** Boton #2 ******************************
+          // *** Misma configuracion que el de arriba pero diferente orientacion ***
           ElevatedButton(
             onPressed: (){
               Navigator.pushNamed(context, 'traducir_documentos');
@@ -143,7 +151,9 @@ class _MenuPageState extends State<MenuPage> {
               ] 
             ),
           ),
+          // ****************************** Boton #2 ******************************
 
+          // ****************************** Boton #3 ******************************
           ElevatedButton(
             onPressed: (){
               Navigator.pushNamed(context, 'traducir_imagenes');
@@ -183,6 +193,8 @@ class _MenuPageState extends State<MenuPage> {
                 ),
               ] 
             ),
+          // ****************************** Boton #3 ******************************
+
           ),
         ]
       ),
