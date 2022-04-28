@@ -92,7 +92,7 @@ class _CrearSesionPasswordPageState extends State<CrearSesionPasswordPage> {
                     email: widget.correo, //Editado
                     password: contraseniaController.text //Editado
                   );
-                  Navigator.pushNamed( context, 'Menu');
+                  Navigator.pushNamed( context, 'menu');
                   errorMensajeFirebase = '';
                 } on FirebaseAuthException catch (error){
                   errorMensajeFirebase = error.message!;

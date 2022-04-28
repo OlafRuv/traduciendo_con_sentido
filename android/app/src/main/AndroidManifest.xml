@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.traduciendoconsentido.tcs">
    <application
-        android:label="tcs"
+        android:label="TCS"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
